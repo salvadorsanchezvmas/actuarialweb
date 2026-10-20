@@ -1,0 +1,6 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    { "name": "front", "runtimeExecutable": "node", "runtimeArgs": ["C:/Users/VMASDI~1/AppData/Local/Temp/claude/D--Users-VmasDise-o04-Documents-GitHub-new-actuarialweb/9b72736b-b381-46e5-be76-7052b6ea057a/scratchpad/tools/serve.js", "front", "5500"], "port": 5500 }
+  ]
+}

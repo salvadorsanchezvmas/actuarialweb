@@ -1,0 +1,86 @@
+# ==========================================================================
+# Actuarial Factor — Apache config (Linux + PHP-FPM hosting, .htaccess enabled)
+# El servidor actual sirve WordPress con pretty permalinks; este archivo
+# reemplaza las reglas de WP para el sitio estático. Requiere mod_rewrite,
+# mod_headers, mod_expires y mod_deflate (habituales en este tipo de hosting).
+# ==========================================================================
+
+Options -Indexes
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Forzar HTTPS
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+  # Forzar www (ajustar si el dominio canónico es sin www)
+  RewriteCond %{HTTP_HOST} ^actuarialfactor\.com$ [NC]
+  RewriteRule ^ https://www.actuarialfactor.com%{REQUEST_URI} [L,R=301]
+
+  # --- API Node.js (back/api) ---
+  # Si el hosting permite proxy (mod_proxy + mod_proxy_http), la API corre en
+  # localhost:4000 con PM2 y se publica en /api sin CORS. Si el proxy no está
+  # habilitado, publicar la API en un subdominio (api.actuarialfactor.com) y
+  # cambiar API_BASE_URL en js/config.js.
+  <IfModule mod_proxy.c>
+    RewriteRule ^api/(.*)$ http://127.0.0.1:4000/api/$1 [P,L,QSA]
+  </IfModule>
+
+  # URLs limpias: /our-firm -> our-firm.html
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME}.html -f
+  RewriteRule ^([^.]+?)/?$ $1.html [L]
+
+  # Redirigir /pagina.html -> /pagina (evita contenido duplicado)
+  RewriteCond %{THE_REQUEST} \s/([^.\s]+)\.html[\s?] [NC]
+  RewriteCond %1 !^index$
+  RewriteRule ^ /%1 [R=301,L]
+</IfModule>
+
+# Seguridad
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  <FilesMatch "\.(ttf|woff2?)$">
+    Header set Access-Control-Allow-Origin "*"
+  </FilesMatch>
+</IfModule>
+
+# Bloquear archivos sensibles / fuentes de trabajo
+<FilesMatch "(^\.|\.(env|log|sql|md|zip|pptx|txt)$)">
+  Require all denied
+</FilesMatch>
+<FilesMatch "^(robots\.txt)$">
+  Require all granted
+</FilesMatch>
+RedirectMatch 404 ^/Nueva\ carpeta/.*$
+RedirectMatch 404 ^/SAW/.*$
+
+# Compresión
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css application/javascript application/json image/svg+xml font/ttf application/manifest+json
+</IfModule>
+
+# Caché
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresDefault "access plus 1 month"
+  ExpiresByType text/html "access plus 0 seconds"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+  ExpiresByType image/jpeg "access plus 6 months"
+  ExpiresByType image/png "access plus 6 months"
+  ExpiresByType image/svg+xml "access plus 6 months"
+  ExpiresByType font/ttf "access plus 1 year"
+  ExpiresByType video/mp4 "access plus 6 months"
+</IfModule>
+
+AddType font/ttf .ttf
+AddType application/manifest+json .webmanifest

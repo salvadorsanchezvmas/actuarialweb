@@ -1,0 +1,29 @@
+{
+  "name": "actuarialfactor-api",
+  "version": "1.0.0",
+  "description": "REST API for the Actuarial Factor website (MySQL + Nodemailer)",
+  "main": "src/server.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "db:schema": "node scripts/run-sql.js database/schema.sql",
+    "db:seed": "node scripts/run-sql.js database/seed.sql",
+    "user:create": "node scripts/create-user.js"
+  },
+  "engines": {
+    "node": ">=18.18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.4.1",
+    "helmet": "^8.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.11.5",
+    "nodemailer": "^6.9.16",
+    "sanitize-html": "^2.13.1"
+  }
+}

@@ -1,0 +1,24 @@
+Server architecture	Linux 6.12.0-211.56.1.el10_2.x86_64 x86_64
+Web server	Unable to determine what web server software is used
+PHP version	8.2.33 (Supports 64bit values)
+PHP SAPI	fpm-fcgi
+PHP max input variables	10000
+PHP time limit	180
+PHP memory limit	512M
+Max input time	60
+Upload max filesize	1024M
+PHP post max size	1024M
+cURL version	8.14.1 OpenSSL/3.5.7
+Is SUHOSIN installed?	No
+Is the Imagick library available?	Yes
+Opcode cache	Enabled
+Opcode cache memory usage	125 MB of 256 MB
+Opcode cache interned strings usage	100.00% of 16 MB (16 B free)
+Opcode cache hit rate	99.52%
+Is the Opcode cache full?	No
+Are pretty permalinks supported?	Yes
+.htaccess rules	Your .htaccess file contains only core WordPress features.
+robots.txt	Your site is using a static robots.txt file. WordPress cannot dynamically serve one.
+Current time	2026-09-25T16:44:07+00:00
+Current UTC time	Friday, 25-Sep-26 16:44:07 UTC
+Current Server time	2026-09-25T10:44:06-06:00
