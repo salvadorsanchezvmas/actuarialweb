@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>SAW · Administrador de contenido | Actuarial Factor</title>
+  <link rel="icon" type="image/png" href="/img/favicon/favicon-32.png">
+  <link rel="stylesheet" href="saw.css">
+</head>
+<body>
+  <div class="saw" id="saw">
+    <aside class="saw-side" id="saw-side" aria-label="Navegación del administrador">
+      <div class="saw-side__brand">
+        <img src="/assets/logos/logo-10th-white-crop.png" alt="Actuarial Factor" width="130" height="60">
+        <span>Administrador</span>
+      </div>
+      <nav class="saw-nav" id="saw-nav"></nav>
+    </aside>
+
+    <div class="saw-main">
+      <header class="saw-top">
+        <button class="saw-icon-btn saw-top__menu" type="button" id="saw-menu" aria-label="Abrir menú" aria-controls="saw-side" aria-expanded="false">☰</button>
+        <h1 class="saw-top__title" id="saw-title">Cargando…</h1>
+        <div class="saw-top__user">
+          <a class="saw-btn saw-btn--ghost" id="saw-site" href="/" target="_blank" rel="noopener">Ver sitio ↗</a>
+          <span class="saw-user" id="saw-user"></span>
+          <button class="saw-btn saw-btn--ghost" type="button" id="saw-logout">Cerrar sesión</button>
+        </div>
+      </header>
+      <main class="saw-content" id="saw-view" tabindex="-1"></main>
+    </div>
+  </div>
+
+  <div class="saw-toasts" id="saw-toasts" role="status" aria-live="polite"></div>
+  <div class="saw-modal" id="saw-modal" hidden></div>
+
+  <script src="saw.js"></script>
+</body>
+</html>

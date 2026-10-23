@@ -11,6 +11,10 @@ const pool = mysql.createPool({
   enableKeepAlive: true,
 });
 
+// Every connection works in UTC so CURRENT_TIMESTAMP / UTC_TIMESTAMP() and the
+// driver (timezone: 'Z') agree, whatever the server's local time zone is.
+pool.on('connection', (conn) => { conn.query("SET time_zone = '+00:00'"); });
+
 /**
  * Run a parameterized query and return rows. Always use placeholders (?):
  * values are escaped by the driver. pool.query (not execute) is used so

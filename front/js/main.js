@@ -375,10 +375,12 @@
     },
     login: function (data) {
       return api.endpoints.login({ email: data.email, password: data.password }).then(function (r) {
-        api.setToken(r && r.token);
+        // The API sets an HttpOnly session cookie and says where this role goes
+        // (admin/editor → content admin SAW). A ?next= is only honored for
+        // same-site paths outside the admin.
         var next = new URLSearchParams(window.location.search).get('next');
-        // Only allow same-site relative redirects
-        window.location.href = next && /^\/(?!\/)/.test(next) ? next : (r && r.redirect) || 'index.html';
+        var safeNext = next && /^\/(?!\/)/.test(next) && next.indexOf('/SAW') !== 0 ? next : null;
+        window.location.href = safeNext || (r && r.redirect) || 'index.html';
         return t('js.signed_in');
       });
     }

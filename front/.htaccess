@@ -28,7 +28,11 @@ ErrorDocument 404 /404.html
   # cambiar API_BASE_URL en js/config.js.
   <IfModule mod_proxy.c>
     RewriteRule ^api/(.*)$ http://127.0.0.1:4000/api/$1 [P,L,QSA]
+    # Administrador de contenido: Node valida la sesión antes de entregar los archivos
+    RewriteRule ^SAW(/.*)?$ http://127.0.0.1:4000/SAW$1 [P,L,QSA]
   </IfModule>
+  # Sin proxy nunca se sirve /SAW directamente (quedaría sin protección de sesión)
+  RewriteRule ^SAW(/|$) - [F,L]
 
   # URLs limpias: /our-firm -> our-firm.html
   RewriteCond %{REQUEST_FILENAME} !-d
@@ -61,7 +65,6 @@ ErrorDocument 404 /404.html
   Require all granted
 </FilesMatch>
 RedirectMatch 404 ^/Nueva\ carpeta/.*$
-RedirectMatch 404 ^/SAW/.*$
 
 # Compresión
 <IfModule mod_deflate.c>

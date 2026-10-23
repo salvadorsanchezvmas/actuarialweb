@@ -1,4 +1,5 @@
 require('dotenv').config();
+const path = require('path');
 
 function required(name) {
   const value = process.env[name];
@@ -6,12 +7,16 @@ function required(name) {
   return value;
 }
 
-const bool = (v, def = false) => (v === undefined ? def : String(v).toLowerCase() === 'true');
+const bool = (v, def = false) => (v === undefined || v === '' ? def : String(v).toLowerCase() === 'true');
 const list = (v) => (v || '').split(',').map((s) => s.trim()).filter(Boolean);
+const apiRoot = path.resolve(__dirname, '..', '..');
+const fromApi = (p) => path.resolve(apiRoot, p);
+
+const isProd = process.env.NODE_ENV === 'production';
 
 const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
-  isProd: process.env.NODE_ENV === 'production',
+  isProd,
   port: Number(process.env.PORT) || 4000,
   corsOrigins: list(process.env.CORS_ORIGINS),
   siteUrl: process.env.SITE_URL || 'http://localhost:5500',
@@ -26,9 +31,47 @@ const env = {
     connectionLimit: Number(process.env.DB_CONNECTION_LIMIT) || 10,
   },
 
-  jwt: {
-    secret: required('JWT_SECRET'),
-    expiresIn: process.env.JWT_EXPIRES_IN || '8h',
+  /** Server-side sessions (random token in an HttpOnly cookie, hash stored in MySQL) */
+  session: {
+    cookieName: process.env.SESSION_COOKIE || 'af_session',
+    ttlHours: Number(process.env.SESSION_TTL_HOURS) || 8,
+    idleMinutes: Number(process.env.SESSION_IDLE_MINUTES) || 120,
+    // Secure cookies need HTTPS: on in production, off on http://localhost
+    secureCookie: bool(process.env.SESSION_SECURE_COOKIE, isProd),
+  },
+
+  /** Paths to the website files (front) */
+  paths: {
+    front: fromApi(process.env.FRONT_DIR || '../../front'),
+    saw: fromApi(process.env.SAW_DIR || '../../front/SAW'),
+    uploads: fromApi(process.env.UPLOADS_DIR || '../../front/uploads'),
+    i18n: fromApi(process.env.I18N_DIR || '../../front/i18n'),
+    backups: fromApi(process.env.BACKUPS_DIR || './storage/backups'),
+  },
+  /** Where the login sends admin/editor users (absolute URL in dev, /SAW/ in prod) */
+  adminUrl: process.env.ADMIN_URL || '/SAW/',
+  uploadMaxMb: Number(process.env.UPLOAD_MAX_MB) || 10,
+
+  /** File repository (role uploader). REPO_DRIVER=onedrive in production, local until credentials exist */
+  repository: {
+    driver: (process.env.REPO_DRIVER || 'local').toLowerCase(),
+    maxMb: Number(process.env.REPO_MAX_MB) || 100,
+    localDir: fromApi(process.env.REPO_LOCAL_DIR || './storage/repository'),
+    onedrive: {
+      // app = OneDrive for Business / SharePoint (client credentials)
+      // delegated = personal OneDrive (an admin signs in once; refresh token stored encrypted)
+      auth: (process.env.ONEDRIVE_AUTH || 'app').toLowerCase(),
+      tenantId: process.env.ONEDRIVE_TENANT_ID || '',
+      clientId: process.env.ONEDRIVE_CLIENT_ID || '',
+      clientSecret: process.env.ONEDRIVE_CLIENT_SECRET || '',
+      // Target (app mode): one of drive id, site id or the owner's user principal name
+      driveId: process.env.ONEDRIVE_DRIVE_ID || '',
+      siteId: process.env.ONEDRIVE_SITE_ID || '',
+      userId: process.env.ONEDRIVE_USER || '',
+      rootFolder: (process.env.ONEDRIVE_ROOT_FOLDER || 'ActuarialFactor/Repositorio').replace(/^\/+|\/+$/g, ''),
+      redirectUri: process.env.ONEDRIVE_REDIRECT_URI || '',
+      tokenKey: process.env.ONEDRIVE_TOKEN_KEY || '', // 32 bytes in hex (64 chars) to encrypt the refresh token
+    },
   },
 
   mail: {
@@ -42,9 +85,5 @@ const env = {
     dryRun: bool(process.env.MAIL_DRY_RUN, false),
   },
 };
-
-if (env.isProd && env.jwt.secret.length < 32) {
-  throw new Error('JWT_SECRET must be at least 32 characters in production');
-}
 
 module.exports = env;

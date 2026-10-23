@@ -7,7 +7,6 @@
   'use strict';
 
   var cfg = window.AF_CONFIG;
-  var TOKEN_KEY = 'af_token';
 
   function lang() { return (window.AF_I18N && window.AF_I18N.lang) || 'en'; }
   function t(key, fallback) { return window.AF_I18N ? window.AF_I18N.t(key) : fallback; }
@@ -32,17 +31,6 @@
     return url;
   }
 
-  function getToken() {
-    try { return sessionStorage.getItem(TOKEN_KEY); } catch (e) { return null; }
-  }
-
-  function setToken(token) {
-    try {
-      if (token) sessionStorage.setItem(TOKEN_KEY, token);
-      else sessionStorage.removeItem(TOKEN_KEY);
-    } catch (e) { /* storage unavailable */ }
-  }
-
   function request(method, path, options) {
     options = options || {};
     var controller = new AbortController();
@@ -51,8 +39,8 @@
     var headers = { Accept: 'application/json', 'Accept-Language': lang() };
     if (method === 'GET') options.params = Object.assign({ lang: lang() }, options.params);
     else if (options.body && typeof options.body === 'object') options.body = Object.assign({ lang: lang() }, options.body);
-    var token = getToken();
-    if (token) headers.Authorization = 'Bearer ' + token;
+    // CSRF guard for the cookie session: the API rejects writes without it
+    headers['X-Requested-With'] = 'fetch';
     if (options.body !== undefined) headers['Content-Type'] = 'application/json';
 
     return fetch(buildUrl(path, options.params), {
@@ -60,7 +48,7 @@
       headers: headers,
       body: options.body !== undefined ? JSON.stringify(options.body) : undefined,
       signal: controller.signal,
-      credentials: 'same-origin'
+      credentials: 'include' // session cookie (HttpOnly) also when the API is on another port in dev
     })
       .then(function (res) {
         return res.text().then(function (text) {
@@ -82,8 +70,6 @@
 
   window.AF_API = {
     ApiError: ApiError,
-    setToken: setToken,
-    getToken: getToken,
     get: function (path, params) { return request('GET', path, { params: params }); },
     post: function (path, body) { return request('POST', path, { body: body }); },
     put: function (path, body) { return request('PUT', path, { body: body }); },
@@ -105,6 +91,7 @@
       subscribe: function (data) { return window.AF_API.post('/newsletter/subscribe', data); },
       login: function (data) { return window.AF_API.post('/auth/login', data); },
       me: function () { return window.AF_API.get('/auth/me'); },
+      logout: function () { return window.AF_API.post('/auth/logout', {}); },
       forgotPassword: function (data) { return window.AF_API.post('/auth/forgot-password', data); },
       resetPassword: function (data) { return window.AF_API.post('/auth/reset-password', data); }
     }

@@ -2,6 +2,7 @@ const env = require('./config/env');
 const app = require('./app');
 const db = require('./config/db');
 const { verifyTransporter } = require('./config/mailer');
+const sessions = require('./services/session.service');
 
 const server = app.listen(env.port, '127.0.0.1', async () => {
   console.info(`[api] listening on http://127.0.0.1:${env.port}/api (${env.nodeEnv})`);
@@ -13,6 +14,9 @@ const server = app.listen(env.port, '127.0.0.1', async () => {
   }
   if (await verifyTransporter()) console.info(`[api] mail transporter ready${env.mail.dryRun ? ' (dry-run)' : ''}`);
 });
+
+// Hourly cleanup of expired admin sessions
+setInterval(() => sessions.purgeExpired().catch(() => {}), 60 * 60 * 1000).unref();
 
 function shutdown(signal) {
   console.info(`[api] ${signal} received, shutting down`);

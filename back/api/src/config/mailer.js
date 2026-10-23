@@ -11,6 +11,8 @@ const transporter = env.mail.dryRun
       host: env.mail.host,
       port: env.mail.port,
       secure: env.mail.secure,
+      // Port 587 (secure=false) must upgrade with STARTTLS; never send in plain text
+      requireTLS: !env.mail.secure,
       auth: env.mail.user ? { user: env.mail.user, pass: env.mail.password } : undefined,
       pool: true,
       maxConnections: 3,

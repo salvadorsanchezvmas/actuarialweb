@@ -1,0 +1,10 @@
+# Archivos subidos desde el administrador (SAW): solo se sirven como estáticos.
+Options -Indexes -ExecCGI
+# Nunca ejecutar ni servir código desde esta carpeta
+<FilesMatch "(?i)\.(php\d?|phtml|phar|pht|pl|py|cgi|sh|asp|aspx|jsp|html?|xhtml|svg|svgz|js|mjs|htaccess)$">
+  Require all denied
+</FilesMatch>
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set Content-Security-Policy "default-src 'none'; img-src 'self'; media-src 'self'; style-src 'unsafe-inline'"
+</IfModule>

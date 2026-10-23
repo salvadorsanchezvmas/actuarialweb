@@ -1,10 +1,10 @@
 const router = require('express').Router();
 const crypto = require('crypto');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 const env = require('../config/env');
 const db = require('../config/db');
 const mail = require('../services/mail.service');
+const sessions = require('../services/session.service');
 const { validate } = require('../middleware/validate');
 const { authLimiter, formLimiter, requireAuth } = require('../middleware/security');
 const { asyncHandler, HttpError } = require('../utils/http');
@@ -13,8 +13,10 @@ const { getLang } = require('../utils/i18n');
 const sha256 = (v) => crypto.createHash('sha256').update(v).digest('hex');
 // Pre-computed hash so timing is similar when the user does not exist
 const DUMMY_HASH = bcrypt.hashSync('dummy-password-for-timing', 10);
+const ROLES = require('../config/roles');
+const ADMIN_ROLES = ROLES.SAW;
 
-/** POST /auth/login → { token, user, redirect } */
+/** POST /auth/login → sets the session cookie, returns { user, redirect } */
 router.post(
   '/login',
   authLimiter,
@@ -26,21 +28,29 @@ router.post(
       [email]
     );
     const ok = await bcrypt.compare(password, user ? user.password_hash : DUMMY_HASH);
-    if (!user || !ok) throw new HttpError(401, 'Invalid email or password.');
+    if (!user || !ok) {
+      throw new HttpError(401, getLang(req) === 'es' ? 'Correo o contraseña incorrectos.' : 'Invalid email or password.');
+    }
 
     await db.query('UPDATE users SET last_login_at = UTC_TIMESTAMP() WHERE id = ?', [user.id]);
-    const token = jwt.sign({ sub: user.id, role: user.role, name: user.name }, env.jwt.secret, { expiresIn: env.jwt.expiresIn });
+    await sessions.create(res, user, req);
     res.json({
-      token,
       user: { id: user.id, name: user.name, email: user.email, role: user.role },
-      redirect: '/portal', // Cambiar cuando exista el portal de clientes
+      // admin/editor/uploader → SAW; clients → future client portal
+      redirect: ADMIN_ROLES.includes(user.role) ? env.adminUrl : '/',
     });
   })
 );
 
-/** GET /auth/me — current user */
+/** POST /auth/logout */
+router.post('/logout', asyncHandler(async (req, res) => {
+  await sessions.destroy(req, res);
+  res.json({ ok: true });
+}));
+
+/** GET /auth/me — current session user */
 router.get('/me', requireAuth, asyncHandler(async (req, res) => {
-  const user = await db.queryOne('SELECT id, name, email, role, company FROM users WHERE id = ?', [req.user.sub]);
+  const user = await db.queryOne('SELECT id, name, email, role, company, last_login_at FROM users WHERE id = ?', [req.user.id]);
   if (!user) throw new HttpError(404, 'User not found.');
   res.json({ data: user });
 }));
@@ -78,6 +88,7 @@ router.post(
     const hash = await bcrypt.hash(req.body.password, 12);
     await db.query('UPDATE users SET password_hash = ? WHERE id = ?', [hash, reset.user_id]);
     await db.query('UPDATE password_resets SET used_at = UTC_TIMESTAMP() WHERE user_id = ? AND used_at IS NULL', [reset.user_id]);
+    await sessions.destroyAllForUser(reset.user_id); // sign out everywhere
     res.json({ message: 'Your password has been updated. You can now sign in.' });
   })
 );
