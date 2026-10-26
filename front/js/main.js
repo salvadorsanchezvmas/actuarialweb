@@ -301,6 +301,11 @@
     updateParallax();
   }
 
+  /* ---------- No dragging images (Firefox ignores -webkit-user-drag) ---------- */
+  document.addEventListener('dragstart', function (e) {
+    if (e.target && (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO')) e.preventDefault();
+  });
+
   /* ---------- Current year ---------- */
   function fillYear() { AF.$$('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); }); }
   fillYear();
