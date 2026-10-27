@@ -37,7 +37,7 @@
   <link rel="manifest" href="site.webmanifest">
 
   <link rel="preload" href="assets/fonts/Raleway-Variable.ttf" as="font" type="font/ttf" crossorigin="">
-  <link rel="preload" href="img/hero-home.jpg" as="image">
+  <link rel="preload" href="img/hero-miami-poster.jpg" as="image">
   <link rel="stylesheet" href="css/main.css">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"ProfessionalService","name":"Actuarial Factor, LLC","url":"https://www.actuarialfactor.com","logo":"https://www.actuarialfactor.com/assets/logos/logo-10th-color.png","image":"https://www.actuarialfactor.com/img/og/og-default.jpg","email":"info@actuarialfactor.com","foundingDate":"2014","description":"Independent actuarial consulting firm serving insurers, reinsurers, MGAs, insurtechs, captives and self-insured organizations in the United States, Latin America and the Caribbean.","areaServed":["US","PR","MX","Latin America","Caribbean"],"address":[{"@type":"PostalAddress","streetAddress":"1 Alhambra Plaza, Floor PH","addressLocality":"Coral Gables","addressRegion":"FL","postalCode":"33134","addressCountry":"US"},{"@type":"PostalAddress","streetAddress":"Av. Pte. Masaryk 111, Polanco","addressLocality":"Mexico City","postalCode":"11560","addressCountry":"MX"}],"telephone":"+1-800-957-9196","sameAs":["https://www.linkedin.com/company/actuarial-factor-llc/"]}</script>
 </head>
@@ -144,10 +144,13 @@
     <!-- Welcome banner -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero__media">
-        <!-- Reemplazar por el video en loop cuando esté disponible:
-        <video autoplay muted loop playsinline poster="img/hero-home.jpg"><source src="assets/video/hero.mp4" type="video/mp4"></video> -->
-        <img src="img/hero-home.jpg" alt="" width="1338" height="906" fetchpriority="high">
+        <!-- Video en loop (sin audio). Móviles reciben la versión ligera de 960 px; el póster se ve mientras carga -->
+        <video class="hero__video" autoplay="" muted="" loop="" playsinline="" preload="auto" poster="img/hero-miami-poster.jpg" aria-hidden="true" data-hero-video="">
+          <source src="assets/video/hero-miami-mobile.mp4" type="video/mp4" media="(max-width: 767px)">
+          <source src="assets/video/hero-miami.mp4" type="video/mp4">
+        </video>
       </div>
+      <button class="hero__video-toggle" type="button" data-hero-video-toggle="" data-i18n-skip="" aria-pressed="false" aria-label="Pause background video"><span aria-hidden="true"></span></button>
       <div class="container">
         <div class="hero__content reveal">
           <h1 class="title-xl" id="hero-title" data-i18n-html="highest_level_of_actuarial_expertise">Highest level of <span>actuarial expertise</span></h1>
@@ -345,10 +348,11 @@
           <div class="flip reveal" data-delay="1" tabindex="0" aria-label="Mexico City office" data-i18n-attr="aria-label:mexico_city_office">
             <div class="flip__inner">
               <div class="flip__face flip__front">
-                <img src="img/office-mexico-city.jpg" alt="Angel of Independence, Mexico City" loading="lazy" width="794" height="695" data-i18n-attr="alt:angel_of_independence_mexico_city">
+                <img src="img/office-cdmx-front.jpg" alt="Angel of Independence and Paseo de la Reforma, Mexico City" loading="lazy" width="1200" height="675" data-i18n-attr="alt:angel_of_independence_and_paseo_de">
                 <div class="flip__label" data-i18n-html="mexico_city_mexico">Mexico City,<small>Mexico</small></div>
               </div>
-              <div class="flip__face flip__back">
+              <div class="flip__face flip__back flip__back--photo">
+                <img class="flip__back-bg" src="img/office-cdmx-back.jpg" alt="" loading="lazy" width="1200" height="800">
                 <h3 data-i18n="mexico">Mexico</h3>
                 <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span data-i18n-html="av_pte_masaryk_111_polanco_mexico">Av. Pte. Masaryk 111, Polanco<br>Mexico City, 11560</span></p>
                 <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8 9.8a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"></path></svg><a href="tel:+525521552059">+52 55-2155-2059</a></p>

@@ -301,6 +301,38 @@
     updateParallax();
   }
 
+  /* ---------- Hero background video: pause button, reduced motion, off-screen pause ---------- */
+  var heroVideo = AF.$('[data-hero-video]');
+  var heroToggle = AF.$('[data-hero-video-toggle]');
+  if (heroVideo) {
+    var userPaused = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var setToggle = function () {
+      if (!heroToggle) return;
+      heroToggle.setAttribute('aria-pressed', String(userPaused));
+      heroToggle.setAttribute('aria-label', t(userPaused ? 'js.video_play' : 'js.video_pause'));
+      heroToggle.classList.toggle('is-paused', userPaused);
+    };
+    var playIfAllowed = function () {
+      if (userPaused) return;
+      var p = heroVideo.play();
+      if (p && p.catch) p.catch(function () { /* autoplay blocked: the poster stays visible */ });
+    };
+    if (userPaused) { heroVideo.removeAttribute('autoplay'); heroVideo.pause(); }
+    if (heroToggle) heroToggle.addEventListener('click', function () {
+      userPaused = !userPaused;
+      if (userPaused) heroVideo.pause(); else playIfAllowed();
+      setToggle();
+    });
+    // Save battery/CPU: pause while the hero is off screen
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        if (entries[0].isIntersecting) playIfAllowed(); else heroVideo.pause();
+      }, { threshold: 0.1 }).observe(heroVideo);
+    }
+    document.addEventListener('af:langchange', setToggle);
+    setToggle();
+  }
+
   /* ---------- No dragging images (Firefox ignores -webkit-user-drag) ---------- */
   document.addEventListener('dragstart', function (e) {
     if (e.target && (e.target.tagName === 'IMG' || e.target.tagName === 'VIDEO')) e.preventDefault();

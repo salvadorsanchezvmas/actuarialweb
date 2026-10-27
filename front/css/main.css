@@ -332,10 +332,12 @@ ul { margin: 0; padding: 0; list-style: none; }
   padding-block: calc(var(--header-h) + 40px) 80px;
 }
 .hero__media { position: absolute; inset: 0; z-index: -2; }
-.hero__media img, .hero__media video { width: 100%; height: 100%; object-fit: cover; }
+.hero__media img, .hero__media video { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.hero__media { background: var(--navy-900); } /* behind the poster while the video loads */
 .hero::before {
   content: ""; position: absolute; inset: 0; z-index: -1;
-  background: linear-gradient(100deg, rgba(22, 30, 52, .42) 0%, rgba(22, 30, 52, .18) 45%, rgba(22, 30, 52, .05) 100%);
+  /* The aerial video is brighter than the old photo: a bit more tint on the text side */
+  background: linear-gradient(100deg, rgba(22, 30, 52, .62) 0%, rgba(22, 30, 52, .38) 45%, rgba(22, 30, 52, .12) 100%);
 }
 .hero__content { max-width: 620px; }
 .hero h1 { color: var(--white); margin-bottom: .4em; text-shadow: 0 2px 24px rgba(22, 30, 52, .35); }
@@ -799,3 +801,36 @@ input, textarea, select, [contenteditable="true"] { -webkit-user-select: text; u
 img, svg, video { -webkit-user-drag: none; user-drag: none; }
 ::selection { background: transparent; }
 input::selection, textarea::selection { background: rgba(194, 167, 106, .35); }
+
+/* ==========================================================================
+   Hero background video
+   ========================================================================== */
+/* Full height on every device; on phones the 16:9 video is cropped around its center */
+.hero { min-height: 100vh; min-height: 100svh; }
+@media (max-width: 899px) {
+  .hero::before { background: linear-gradient(to top, rgba(22, 30, 52, .78) 0%, rgba(22, 30, 52, .45) 55%, rgba(22, 30, 52, .3) 100%); }
+}
+.hero__video-toggle {
+  position: absolute; right: var(--gutter); bottom: 24px; z-index: 2;
+  width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center;
+  border: 1.5px solid rgba(255, 255, 255, .7); background: rgba(22, 30, 52, .35); color: var(--white);
+  transition: background .2s, border-color .2s;
+}
+.hero__video-toggle:hover { background: rgba(22, 30, 52, .6); border-color: var(--white); }
+/* Pause icon (two bars) → play icon (triangle) when paused */
+.hero__video-toggle span { width: 12px; height: 14px; border-left: 4px solid currentColor; border-right: 4px solid currentColor; }
+.hero__video-toggle.is-paused span { width: 0; height: 0; border-style: solid; border-width: 8px 0 8px 13px; border-color: transparent transparent transparent currentColor; margin-left: 4px; }
+@media (min-width: 1100px) { .hero__video-toggle { right: var(--side); bottom: 40px; } }
+
+/* Office card back with a photo (Mexico City): image + navy layer so the address stays readable */
+.flip__back--photo { isolation: isolate; background: var(--navy-900); }
+.flip__back-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; z-index: -2; }
+.flip__back--photo::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(90deg, rgba(22, 30, 52, .9) 0%, rgba(22, 30, 52, .76) 50%, rgba(22, 30, 52, .5) 100%);
+}
+.flip__back--photo h3, .flip__back--photo p { text-shadow: 0 1px 8px rgba(0, 0, 0, .45); }
+@media (max-width: 639px) { .flip__back--photo::before { background: rgba(22, 30, 52, .8); } }
+/* Front label: a touch more shade at the bottom for bright photos */
+#offices .flip__front::after { background: linear-gradient(to top, rgba(22, 30, 52, .7) 0%, rgba(22, 30, 52, .25) 45%, rgba(22, 30, 52, 0) 70%); }
+#offices .flip__label { text-shadow: 0 2px 12px rgba(0, 0, 0, .4); }
