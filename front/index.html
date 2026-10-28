@@ -15,12 +15,18 @@
   <meta property="og:url" content="https://www.actuarialfactor.com/">
   <meta property="og:title" content="Actuarial Factor | Highest level of actuarial expertise" data-i18n-attr="content:meta.actuarial_factor_highest_level_of_actuarial">
   <meta property="og:description" content="Independent actuarial consulting firm. We help insurers, reinsurers, MGAs, insurtechs, captives and self-insured organizations assess pricing, reserves and insurance risk." data-i18n-attr="content:meta.independent_actuarial_consulting_firm_we_help">
-  <meta property="og:image" content="https://www.actuarialfactor.com/img/og/og-default.jpg">
-  <meta property="og:image:secure_url" content="https://www.actuarialfactor.com/img/og/og-default.jpg">
+  <meta property="og:image" content="https://www.actuarialfactor.com/img/og/og-default.jpg?v=2">
+  <meta property="og:image:secure_url" content="https://www.actuarialfactor.com/img/og/og-default.jpg?v=2">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:image:alt" content="Actuarial Factor | Highest level of actuarial expertise" data-i18n-attr="content:meta.actuarial_factor_highest_level_of_actuarial">
+  <!-- Alternate square card (WhatsApp, LinkedIn mobile) -->
+  <meta property="og:image" content="https://www.actuarialfactor.com/img/og/og-square.jpg?v=2">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="1200">
+  <meta property="og:logo" content="https://www.actuarialfactor.com/assets/logos/logo-10th-color-crop.png">
   <!-- Facebook App ID (opcional): <meta property="fb:app_id" content="YOUR_APP_ID"> -->
   <!-- LinkedIn usa og:* ; autor opcional para artículos -->
   <meta name="author" content="Actuarial Factor, LLC">
@@ -29,7 +35,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Actuarial Factor | Highest level of actuarial expertise" data-i18n-attr="content:meta.actuarial_factor_highest_level_of_actuarial">
   <meta name="twitter:description" content="Independent actuarial consulting firm. We help insurers, reinsurers, MGAs, insurtechs, captives and self-insured organizations assess pricing, reserves and insurance risk." data-i18n-attr="content:meta.independent_actuarial_consulting_firm_we_help">
-  <meta name="twitter:image" content="https://www.actuarialfactor.com/img/og/og-default.jpg">
+  <meta name="twitter:image" content="https://www.actuarialfactor.com/img/og/og-default.jpg?v=2">
 
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32.png">
   <link rel="icon" type="image/png" sizes="192x192" href="img/favicon/icon-192.png">
@@ -144,13 +150,10 @@
     <!-- Welcome banner -->
     <section class="hero" aria-labelledby="hero-title">
       <div class="hero__media">
-        <!-- Video en loop (sin audio). Móviles reciben la versión ligera de 960 px; el póster se ve mientras carga -->
-        <video class="hero__video" autoplay="" muted="" loop="" playsinline="" preload="auto" poster="img/hero-miami-poster.jpg" aria-hidden="true" data-hero-video="">
-          <source src="assets/video/hero-miami-mobile.mp4" type="video/mp4" media="(max-width: 767px)">
-          <source src="assets/video/hero-miami.mp4" type="video/mp4">
-        </video>
+        <!-- Video en loop (sin audio). js/main.js elige la versión: 960 px en móviles, 1280 px en escritorio
+             (Safari ignora media en <source>). El póster se ve mientras carga o si el video no puede reproducirse. -->
+        <video class="hero__video" autoplay="" muted="" loop="" playsinline="" preload="none" poster="img/hero-miami-poster.jpg" aria-hidden="true" data-hero-video="" data-src="assets/video/hero-miami.mp4" data-src-mobile="assets/video/hero-miami-mobile.mp4"></video>
       </div>
-      <button class="hero__video-toggle" type="button" data-hero-video-toggle="" data-i18n-skip="" aria-pressed="false" aria-label="Pause background video"><span aria-hidden="true"></span></button>
       <div class="container">
         <div class="hero__content reveal">
           <h1 class="title-xl" id="hero-title" data-i18n-html="highest_level_of_actuarial_expertise">Highest level of <span>actuarial expertise</span></h1>

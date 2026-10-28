@@ -114,7 +114,7 @@ button { cursor: pointer; }
 .saw-readonly { padding: 9px 12px; background: var(--bg); border-radius: 6px; white-space: pre-wrap; word-break: break-word; min-height: 40px; }
 .saw-switch { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; padding: 6px 0; }
 .saw-switch input { width: 18px; height: 18px; accent-color: var(--navy-700); }
-.saw-form-actions { position: sticky; bottom: 0; display: flex; gap: 10px; align-items: center; padding: 14px 0; margin-top: 8px; background: linear-gradient(to top, var(--bg) 70%, transparent); }
+.saw-form-actions { position: sticky; bottom: 0; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 14px 0; margin-top: 8px; background: linear-gradient(to top, var(--bg) 70%, transparent); }
 .saw-form-actions__spacer { flex: 1; }
 .saw-back { display: inline-flex; gap: 6px; margin-bottom: 14px; font-weight: 600; text-decoration: none; }
 
@@ -209,3 +209,13 @@ button { cursor: pointer; }
 .saw-table tbody tr.is-static { cursor: default; }
 .saw-repo-meta { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 20px 0 0; font-size: .85rem; padding-top: 16px; border-top: 1px solid var(--line); }
 .saw-repo-meta dd { margin: 0; word-break: break-word; }
+
+/* iPhone/iPad: 16px in fields avoids Safari's automatic zoom on focus; respect notch/home bar */
+@media (hover: none) and (pointer: coarse) {
+  .saw-input, .saw-select, .saw-textarea, .saw-editor__area, .saw-editor__source, .saw-text-row .saw-textarea { font-size: 16px; }
+}
+@supports (padding: max(0px)) {
+  .saw-top { padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); }
+  .saw-content { padding-bottom: max(64px, env(safe-area-inset-bottom)); }
+  .saw-toasts { bottom: max(84px, calc(env(safe-area-inset-bottom) + 64px)); }
+}

@@ -16,8 +16,12 @@ app.disable('x-powered-by');
 
 app.use(helmet({
   crossOriginResourcePolicy: { policy: 'same-site' },
+  // HTTPS-only rules in production. On http://localhost Safari would otherwise
+  // force https:// (upgrade-insecure-requests / HSTS) and SAW could not load.
+  hsts: env.isProd,
   contentSecurityPolicy: {
     directives: {
+      upgradeInsecureRequests: env.isProd ? [] : null,
       defaultSrc: ["'self'"],
       imgSrc: ["'self'", 'data:', 'blob:'],
       mediaSrc: ["'self'", 'blob:'],
