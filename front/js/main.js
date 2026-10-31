@@ -49,20 +49,16 @@
   Promise.all([pageLoaded, i18n ? i18n.ready : null]).then(hideLoader, hideLoader);
   setTimeout(hideLoader, 5000); // safety net if a resource hangs
 
-  /* ---------- Header: compact on scroll, hides on scroll down ---------- */
+  /* ---------- Header: compact on scroll, always visible ---------- */
   var header = AF.$('.header');
   var toTop = AF.$('.to-top');
-  var lastY = window.scrollY;
   var ticking = false;
   function onScroll() {
     var y = window.scrollY;
     if (header) {
-      header.classList.toggle('is-scrolled', y > 60);
-      var goingDown = y > lastY && y > 400;
-      header.classList.toggle('is-hidden', goingDown && !document.body.classList.contains('is-locked'));
+      header.classList.toggle('is-scrolled', y > 60); // stays visible: the header is always fixed
     }
     if (toTop) toTop.classList.toggle('is-visible', y > 700);
-    lastY = y;
     ticking = false;
   }
   window.addEventListener('scroll', function () {
@@ -237,6 +233,9 @@
     function onDot(e) { var b = e.target.closest('[data-page]'); if (b) { goTo(Number(b.getAttribute('data-page'))); play(); } }
     function pause() { paused = true; }
     function resume() { paused = false; }
+    var touchT;
+    function onTouchStart() { clearTimeout(touchT); paused = true; }
+    function onTouchEnd() { clearTimeout(touchT); touchT = setTimeout(function () { paused = false; play(); }, 4000); }
     function onKey(e) {
       if (e.key === 'ArrowRight') { e.preventDefault(); goTo(page + 1); }
       if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(page - 1); }
@@ -250,7 +249,8 @@
     root.addEventListener('mouseleave', resume);
     root.addEventListener('focusin', pause);
     root.addEventListener('focusout', resume);
-    root.addEventListener('touchstart', pause, { passive: true });
+    root.addEventListener('touchstart', onTouchStart, { passive: true });
+    root.addEventListener('touchend', onTouchEnd, { passive: true });
     window.addEventListener('resize', onResize);
     document.addEventListener('af:langchange', onResize);
 
@@ -267,7 +267,9 @@
         root.removeEventListener('mouseleave', resume);
         root.removeEventListener('focusin', pause);
         root.removeEventListener('focusout', resume);
-        root.removeEventListener('touchstart', pause);
+        clearTimeout(touchT);
+        root.removeEventListener('touchstart', onTouchStart);
+        root.removeEventListener('touchend', onTouchEnd);
         window.removeEventListener('resize', onResize);
         document.removeEventListener('af:langchange', onResize);
       }

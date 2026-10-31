@@ -75,7 +75,7 @@
       </nav>
       <div class="header__actions">
         <div class="lang-switch" role="group" aria-label="Language / Idioma" data-i18n-skip="">
-          <button type="button" data-lang="en" aria-pressed="true" lang="en" title="English">EN</button><span aria-hidden="true">|</span><button type="button" data-lang="es" aria-pressed="false" lang="es" title="Español">ES</button>
+          <button type="button" data-lang="en" aria-pressed="true" lang="en" title="English" aria-label="English"><img src="img/flags/us.svg" alt="" width="24" height="16"></button><button type="button" data-lang="es" aria-pressed="false" lang="es" title="Español" aria-label="Español"><img src="img/flags/mx.svg" alt="" width="24" height="16"></button>
         </div>
         <a class="icon-btn header__login" href="login.html" aria-label="Client login" data-nav="login" data-i18n-attr="aria-label:client_login"><span class="login-icon" aria-hidden="true"></span></a>
         <button class="icon-btn" type="button" data-sidenav-open="" aria-controls="sidenav" aria-expanded="false" aria-label="Open menu" data-i18n-attr="aria-label:open_menu">
@@ -136,7 +136,7 @@
     </nav>
     <div class="sidenav__foot">
       <div class="lang-switch lang-switch--sidenav" role="group" aria-label="Language / Idioma" data-i18n-skip="">
-          <button type="button" data-lang="en" aria-pressed="true" lang="en" title="English">EN</button><span aria-hidden="true">|</span><button type="button" data-lang="es" aria-pressed="false" lang="es" title="Español">ES</button>
+          <button type="button" data-lang="en" aria-pressed="true" lang="en" title="English" aria-label="English"><img src="img/flags/us.svg" alt="" width="24" height="16"></button><button type="button" data-lang="es" aria-pressed="false" lang="es" title="Español" aria-label="Español"><img src="img/flags/mx.svg" alt="" width="24" height="16"></button>
         </div>
       <a class="btn btn--gold btn--block" href="contact.html#schedule" data-i18n="schedule_a_consultation">Schedule a consultation</a>
       <div><a href="tel:+18009579196">+1 800-957-9196</a><br><a href="mailto:info@actuarialfactor.com">info@actuarialfactor.com</a></div>
@@ -187,10 +187,11 @@
           <div class="flip reveal" tabindex="0" aria-label="Coral Gables, Florida office" data-i18n-attr="aria-label:coral_gables_florida_office">
             <div class="flip__inner">
               <div class="flip__face flip__front">
-                <img src="img/office-coral-gables.jpg" alt="Miami skyline" loading="lazy" width="800" height="715" data-i18n-attr="alt:miami_skyline">
+                <img src="img/office-coral-front.jpg" alt="Brickell skyline from Biscayne Bay, Miami" loading="lazy" width="1600" height="1200" data-i18n-attr="alt:brickell_skyline_from_biscayne_bay_miami">
                 <div class="flip__label" data-i18n-html="coral_gables_florida_us">Coral Gables,<small>Florida, US</small></div>
               </div>
-              <div class="flip__face flip__back">
+              <div class="flip__face flip__back flip__back--photo">
+                <img class="flip__back-bg flip__back-bg--coral" src="img/office-coral-back.jpg" alt="" loading="lazy" width="1200" height="900">
                 <h3 data-i18n="united_states">United States</h3>
                 <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span data-i18n-html="1_alhambra_plaza_floor_ph_coral">1 Alhambra Plaza, Floor PH<br>Coral Gables, FL 33134</span></p>
                 <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8 9.8a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"></path></svg><a href="tel:+18009579196">+1 800-957-9196</a></p>
@@ -205,7 +206,7 @@
                 <div class="flip__label" data-i18n-html="mexico_city_mexico">Mexico City,<small>Mexico</small></div>
               </div>
               <div class="flip__face flip__back flip__back--photo">
-                <img class="flip__back-bg" src="img/office-cdmx-back.jpg" alt="" loading="lazy" width="1200" height="800">
+                <img class="flip__back-bg flip__back-bg--cdmx" src="img/office-cdmx-back.jpg" alt="" loading="lazy" width="1200" height="800">
                 <h3 data-i18n="mexico">Mexico</h3>
                 <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 21s-7-6.2-7-11a7 7 0 0114 0c0 4.8-7 11-7 11z"></path><circle cx="12" cy="10" r="2.5"></circle></svg><span data-i18n-html="av_pte_masaryk_111_polanco_mexico">Av. Pte. Masaryk 111, Polanco<br>Mexico City, 11560</span></p>
                 <p><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8 9.8a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"></path></svg><a href="tel:+525521552059">+52 55-2155-2059</a></p>
@@ -223,19 +224,18 @@
     <div class="container footer__inner">
       <div class="footer__brand">
         <a href="index.html" aria-label="Actuarial Factor — Home" data-i18n-attr="aria-label:actuarial_factor_home"><img src="assets/logos/logo-10th-color-crop.png" alt="Actuarial Factor" width="165" height="76" loading="lazy" data-i18n-attr="alt:actuarial_factor"></a>
-        <p data-i18n="independent_actuarial_consulting_personalized_service_and">Independent actuarial consulting, personalized service, and international experience.</p>
+        <p class="footer__copy" data-i18n-html="2026_actuarial_factor_llc_all_rights">© <span data-year="">2026</span> Actuarial Factor, LLC. All rights reserved</p>
       </div>
       <div class="footer__end">
-        <div class="footer__follow">
-          <span data-i18n="follow_us_on">Follow us on</span>
-          <a class="footer__linkedin" href="https://www.linkedin.com/company/actuarial-factor-llc/" target="_blank" rel="noopener" aria-label="Actuarial Factor on LinkedIn" data-i18n-attr="aria-label:actuarial_factor_on_linkedin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9V21H9z"></path></svg></a>
+        <div class="footer__info">
+          <p class="footer__tagline" data-i18n="independent_actuarial_consulting_personalized_service_and">Independent actuarial consulting, personalized service, and international experience.</p>
+          <nav class="footer__legal" aria-label="Legal" data-i18n-attr="aria-label:legal">
+            <a href="sitemap.html" data-i18n="sitemap">Sitemap</a>
+            <a href="privacy-policy.html" data-i18n="privacy_policy">Privacy Policy</a>
+            <a href="terms-of-use.html" data-i18n="terms_of_use">Terms of use</a>
+          </nav>
         </div>
-        <nav class="footer__legal" aria-label="Legal" data-i18n-attr="aria-label:legal">
-          <span data-i18n-html="2026_actuarial_factor_llc_all_rights">© <span data-year="">2026</span> Actuarial Factor, LLC. All rights reserved</span>
-          <a href="sitemap.html" data-i18n="sitemap">Sitemap</a>
-          <a href="privacy-policy.html" data-i18n="privacy_policy">Privacy Policy</a>
-          <a href="terms-of-use.html" data-i18n="terms_of_use">Terms of use</a>
-        </nav>
+        <a class="footer__linkedin" href="https://www.linkedin.com/company/actuarial-factor-llc/" target="_blank" rel="noopener" aria-label="Actuarial Factor on LinkedIn" data-i18n-attr="aria-label:actuarial_factor_on_linkedin"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5a2.5 2.5 0 11-.02 5 2.5 2.5 0 01.02-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.6c0-1.3 0-3-1.9-3s-2.1 1.4-2.1 2.9V21H9z"></path></svg></a>
       </div>
     </div>
   </footer>
