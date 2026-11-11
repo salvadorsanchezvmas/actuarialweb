@@ -233,8 +233,16 @@ module.exports = {
 
   /** Short-lived pre-authenticated URL: the browser downloads straight from OneDrive */
   async download(itemId) {
-    const item = await graph('GET', `${driveBase()}/items/${encodeURIComponent(itemId)}?$select=id,name,@microsoft.graph.downloadUrl`);
-    const url = item['@microsoft.graph.downloadUrl'];
+    // No $select: personal OneDrive omits the download link when specific fields are requested
+    const item = await graph('GET', `${driveBase()}/items/${encodeURIComponent(itemId)}`);
+    let url = item['@microsoft.graph.downloadUrl'];
+    if (!url) {
+      // Fallback: /content answers with a redirect to a temporary download address
+      const res = await fetch(`${GRAPH}${driveBase()}/items/${encodeURIComponent(itemId)}/content`, {
+        headers: { Authorization: `Bearer ${await getAccessToken()}` }, redirect: 'manual',
+      });
+      url = res.headers.get('location');
+    }
     if (!url) throw new HttpError(502, 'OneDrive no devolvió un enlace de descarga.');
     return { redirectUrl: url };
   },

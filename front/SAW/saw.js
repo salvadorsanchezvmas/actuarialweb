@@ -865,7 +865,9 @@
         fileInput.setAttribute('accept', info.extensions.join(','));
         $('[data-limits]', root).textContent = info.extensions.map(function (e) { return e.slice(1).toUpperCase(); }).join(', ') + ' · máximo ' + info.maxMb + ' MB por archivo';
         var dot = info.connected ? 'is-ok' : info.configured ? 'is-bad' : '';
-        var where = info.driver === 'onedrive' ? 'OneDrive' + (info.rootFolder ? ' · carpeta «' + info.rootFolder + '»' : '') : 'Servidor local';
+        // Uploaders (ownFilesOnly) never see which account, drive or folder stores the files
+        var where = info.ownFilesOnly ? 'Mis archivos'
+          : info.driver === 'onedrive' ? 'OneDrive' + (info.rootFolder ? ' · carpeta «' + info.rootFolder + '»' : '') : 'Servidor local';
         var quota = info.quota && info.quota.total ? ' · espacio usado ' + formatSize(info.quota.used) + ' de ' + formatSize(info.quota.total) : '';
         var adminBtns = '';
         if (state.features.repositorySettings && info.driver === 'onedrive') {
@@ -990,11 +992,12 @@
         var rows = $('[data-rows]', root);
         if (!rows) return;
         rows.innerHTML = out.data.length ? out.data.map(function (f) {
-          var icon = /^image\//.test(f.mime_type) && f.storage === 'local'
+          // Previews: local files, and uploaders' files (the API streams them, whatever the storage)
+          var icon = /^image\//.test(f.mime_type) && (f.storage === 'local' || !f.storage)
             ? '<img class="saw-thumb" src="' + esc(repoFileUrl(f, true)) + '" alt="" loading="lazy">' : fileTypeBadge(f);
           return '<tr class="is-static" data-id="' + f.id + '">' +
             '<td><div class="saw-file-cell">' + icon + '<span class="saw-file-cell__text"><span class="saw-file-cell__title">' + esc(f.title || f.file_name) +
-              (f.is_missing ? ' <span class="saw-badge saw-badge--bad">No está en OneDrive</span>' : '') + '</span><span class="saw-file-cell__name">' + esc(f.file_name) + '</span></span></div></td>' +
+              (f.is_missing ? ' <span class="saw-badge saw-badge--bad">' + (f.storage ? 'No está en OneDrive' : 'No disponible') + '</span>' : '') + '</span><span class="saw-file-cell__name">' + esc(f.file_name) + '</span></span></div></td>' +
             '<td>' + (f.category ? esc(f.category) : '<span class="saw-muted">—</span>') + '</td>' +
             '<td>' + (f.lang ? esc(REPO_LANGS[f.lang]) : '<span class="saw-muted">—</span>') + '</td>' +
             '<td>' + formatSize(Number(f.size_bytes)) + '</td>' +
@@ -1020,11 +1023,12 @@
     }
 
     function editFile(f) {
-      var where = f.storage === 'onedrive' ? 'OneDrive' : 'Servidor local';
+      // f.storage is only sent to admin/editor; uploaders get no storage details
+      var where = !f.storage ? '' : f.storage === 'onedrive' ? 'OneDrive' : 'Servidor local';
       var modal = openModal(
         '<div class="saw-modal__head"><h2>Editar metadatos</h2><button class="saw-icon-btn" type="button" data-close aria-label="Cerrar">✕</button></div>' +
         '<div class="saw-modal__body"><form class="saw-form" data-edit-form novalidate>' +
-          '<div class="saw-field" data-field="file_name"><label for="e-name">Nombre del archivo</label><input class="saw-input" id="e-name" name="file_name" maxlength="200" value="' + esc(f.file_name) + '"><span class="saw-field__help">La extensión se conserva. El cambio se aplica también en ' + esc(where) + '.</span><span class="saw-field__error" data-error></span></div>' +
+          '<div class="saw-field" data-field="file_name"><label for="e-name">Nombre del archivo</label><input class="saw-input" id="e-name" name="file_name" maxlength="200" value="' + esc(f.file_name) + '"><span class="saw-field__help">La extensión se conserva.' + (where ? ' El cambio se aplica también en ' + esc(where) + '.' : '') + '</span><span class="saw-field__error" data-error></span></div>' +
           '<div class="saw-field" data-field="title"><label for="e-title">Título</label><input class="saw-input" id="e-title" name="title" maxlength="255" value="' + esc(f.title || '') + '"><span class="saw-field__error" data-error></span></div>' +
           '<div class="saw-field saw-field--half" data-field="category"><label for="e-cat">Categoría (carpeta)</label><input class="saw-input" id="e-cat" name="category" maxlength="120" list="r-cats" value="' + esc(f.category || '') + '"><span class="saw-field__help">Al cambiarla, el archivo se mueve de carpeta.</span><span class="saw-field__error" data-error></span></div>' +
           '<div class="saw-field saw-field--half" data-field="lang"><label for="e-lang">Idioma</label><select class="saw-select" id="e-lang" name="lang"><option value="">—</option>' +
@@ -1032,7 +1036,7 @@
           '<div class="saw-field" data-field="tags"><label for="e-tags">Etiquetas</label><input class="saw-input" id="e-tags" name="tags" maxlength="500" value="' + esc(f.tags || '') + '"><span class="saw-field__error" data-error></span></div>' +
           '<div class="saw-field" data-field="description"><label for="e-desc">Descripción</label><textarea class="saw-textarea" id="e-desc" name="description" maxlength="5000">' + esc(f.description || '') + '</textarea><span class="saw-field__error" data-error></span></div>' +
         '</form>' +
-        '<dl class="saw-repo-meta"><dt class="saw-muted">Almacenamiento</dt><dd>' + esc(where) + (f.folder ? ' · /' + esc(f.folder) : '') + '</dd>' +
+        '<dl class="saw-repo-meta">' + (where ? '<dt class="saw-muted">Almacenamiento</dt><dd>' + esc(where) + (f.folder ? ' · /' + esc(f.folder) : '') + '</dd>' : '') +
           '<dt class="saw-muted">Tipo / tamaño</dt><dd>' + esc(f.mime_type) + ' · ' + formatSize(Number(f.size_bytes)) + '</dd>' +
           '<dt class="saw-muted">Subido</dt><dd>' + esc(formatDate(f.created_at)) + ' · ' + esc(f.uploaded_by_name || '—') + '</dd>' +
           '<dt class="saw-muted">Última edición</dt><dd>' + esc(formatDate(f.updated_at)) + ' · ' + esc(f.updated_by_name || '—') + '</dd>' +

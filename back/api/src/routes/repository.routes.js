@@ -19,9 +19,9 @@ const idParam = (req) => {
   return id;
 };
 
-router.get('/status', asyncHandler(async (req, res) => res.json({ data: await repo.status() })));
-router.get('/categories', asyncHandler(async (req, res) => res.json({ data: await repo.categories() })));
-router.get('/', asyncHandler(async (req, res) => res.json(await repo.list(req.query))));
+router.get('/status', asyncHandler(async (req, res) => res.json({ data: await repo.status(req.user) })));
+router.get('/categories', asyncHandler(async (req, res) => res.json({ data: await repo.categories(req.user) })));
+router.get('/', asyncHandler(async (req, res) => res.json(await repo.list(req.query, req.user))));
 
 router.post('/', repo.receive, asyncHandler(async (req, res) => {
   if (!req.files || !req.files.length) throw new HttpError(422, 'Seleccione al menos un archivo.');
@@ -29,10 +29,10 @@ router.post('/', repo.receive, asyncHandler(async (req, res) => {
   res.status(out.saved.length ? 201 : 422).json(out);
 }));
 
-router.get('/:id', asyncHandler(async (req, res) => res.json({ data: await repo.getOne(idParam(req)) })));
-router.get('/:id/download', asyncHandler(async (req, res) => repo.download(idParam(req), res, req.query.inline === '1')));
+router.get('/:id', asyncHandler(async (req, res) => res.json({ data: await repo.getOne(idParam(req), req.user) })));
+router.get('/:id/download', asyncHandler(async (req, res) => repo.download(idParam(req), res, req.query.inline === '1', req.user)));
 router.put('/:id', asyncHandler(async (req, res) => res.json({ data: await repo.update(idParam(req), req.body || {}, req.user) })));
-router.delete('/:id', asyncHandler(async (req, res) => { await repo.remove(idParam(req)); res.json({ ok: true }); }));
+router.delete('/:id', asyncHandler(async (req, res) => { await repo.remove(idParam(req), req.user); res.json({ ok: true }); }));
 
 /* ---------- Admin: sync and OneDrive connection ---------- */
 router.post('/sync', adminOnly, asyncHandler(async (req, res) => {

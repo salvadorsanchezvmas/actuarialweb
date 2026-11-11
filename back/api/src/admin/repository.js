@@ -8,8 +8,10 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const crypto = require('crypto');
+const { Readable } = require('stream');
 const multer = require('multer');
 const env = require('../config/env');
+const ROLES = require('../config/roles');
 const db = require('../config/db');
 const storage = require('../services/repository');
 const { HttpError } = require('../utils/http');
@@ -108,10 +110,31 @@ const SELECT = `SELECT f.id, f.storage, f.folder, f.file_name, f.mime_type, f.si
   u.name AS uploaded_by_name, e.name AS updated_by_name
   FROM repo_files f LEFT JOIN users u ON u.id = f.uploaded_by LEFT JOIN users e ON e.id = f.updated_by`;
 
-async function getOne(id) {
-  const row = await db.queryOne(`${SELECT} WHERE f.id = ?`, [id]);
+/* ---------- Who sees what ----------
+   admin / editor see every file and where it is stored.
+   uploader only sees the files they uploaded, without storage details
+   (OneDrive account, folder path, OneDrive links). */
+const seesAll = (user) => ROLES.REPOSITORY_ALL.includes(user.role);
+const ownScope = (user, alias) => (seesAll(user) ? { sql: '', params: [] } : { sql: `${alias}.uploaded_by = ?`, params: [user.id] });
+const andScope = (scope) => (scope.sql ? ' AND ' + scope.sql : '');
+function forUser(row, user) {
+  if (!row || seesAll(user)) return row;
+  const { storage: _s, folder: _f, web_url: _w, ...safe } = row;
+  return safe;
+}
+/** Loads a row the user may touch; 404 otherwise, so other people's files are not revealed */
+async function findOwned(id, user, cols) {
+  const scope = ownScope(user, 'repo_files');
+  const row = await db.queryOne(`SELECT ${cols} FROM repo_files WHERE id = ?${andScope(scope)}`, [id, ...scope.params]);
   if (!row) throw new HttpError(404, 'Archivo no encontrado.');
   return row;
+}
+
+async function getOne(id, user) {
+  const scope = ownScope(user, 'f');
+  const row = await db.queryOne(`${SELECT} WHERE f.id = ?${andScope(scope)}`, [id, ...scope.params]);
+  if (!row) throw new HttpError(404, 'Archivo no encontrado.');
+  return forUser(row, user);
 }
 
 /* ---------- Operations ---------- */
@@ -135,7 +158,7 @@ async function create(files, body, user) {
         [driver.name, result.itemId, folder, result.fileName, mime, f.size, title, meta.description || null, meta.tags || null,
           meta.category || null, meta.lang || null, result.webUrl, user.id, user.id]
       );
-      saved.push(await getOne(ins.insertId));
+      saved.push(await getOne(ins.insertId, user));
     } catch (err) {
       rejected.push({ name: f.originalname, message: err.message });
     } finally {
@@ -145,11 +168,12 @@ async function create(files, body, user) {
   return { saved, rejected };
 }
 
-async function list(query) {
+async function list(query, user) {
   const limit = Math.min(Math.max(parseInt(query.limit, 10) || 25, 1), 100);
   const page = Math.max(parseInt(query.page, 10) || 1, 1);
-  const where = [];
-  const params = [];
+  const scope = ownScope(user, 'f');
+  const where = scope.sql ? [scope.sql] : [];
+  const params = [...scope.params];
   const q = typeof query.q === 'string' ? query.q.trim().slice(0, 100) : '';
   if (q) {
     where.push('(f.file_name LIKE ? OR f.title LIKE ? OR f.description LIKE ? OR f.tags LIKE ?)');
@@ -163,12 +187,13 @@ async function list(query) {
   const order = `${sorts[query.sort] || 'f.created_at'} ${query.dir === 'asc' ? 'ASC' : 'DESC'}`;
   const sql = where.length ? 'WHERE ' + where.join(' AND ') : '';
   const [{ total }] = await db.query(`SELECT COUNT(*) AS total FROM repo_files f ${sql}`, params);
-  const data = await db.query(`${SELECT} ${sql} ORDER BY ${order}, f.id DESC LIMIT ? OFFSET ?`, [...params, limit, (page - 1) * limit]);
+  const rows = await db.query(`${SELECT} ${sql} ORDER BY ${order}, f.id DESC LIMIT ? OFFSET ?`, [...params, limit, (page - 1) * limit]);
+  const data = rows.map((r) => forUser(r, user));
   return { data, meta: { page, limit, total, pages: Math.max(Math.ceil(total / limit), 1) } };
 }
 
 async function update(id, body, user) {
-  const row = await getOne(id);
+  const row = await findOwned(id, user, 'id, storage, item_id, file_name, category');
   const meta = metadata(body, { partial: true });
   const driver = storage.forStorage(row.storage);
   const changes = { ...meta };
@@ -195,22 +220,26 @@ async function update(id, body, user) {
       [...cols.map((c) => changes[c]), user.id, id]
     );
   }
-  return getOne(id);
+  return getOne(id, user);
 }
 
-async function remove(id) {
-  const row = await db.queryOne('SELECT id, storage, item_id FROM repo_files WHERE id = ?', [id]);
-  if (!row) throw new HttpError(404, 'Archivo no encontrado.');
+async function remove(id, user) {
+  const row = await findOwned(id, user, 'id, storage, item_id');
   await storage.forStorage(row.storage).remove(row.item_id);
   await db.query('DELETE FROM repo_files WHERE id = ?', [id]);
 }
 
 /** Sends the file: redirect to OneDrive's temporary link, or stream the local copy */
-async function download(id, res, inline) {
-  const row = await db.queryOne('SELECT storage, item_id, file_name, mime_type FROM repo_files WHERE id = ?', [id]);
-  if (!row) throw new HttpError(404, 'Archivo no encontrado.');
+async function download(id, res, inline, user) {
+  const row = await findOwned(id, user, 'storage, item_id, file_name, mime_type');
   const out = await storage.forStorage(row.storage).download(row.item_id);
-  if (out.redirectUrl) return res.redirect(302, out.redirectUrl);
+  // admin/editor go straight to OneDrive's link; uploaders get the file through the API (no OneDrive address exposed)
+  if (out.redirectUrl && seesAll(user)) return res.redirect(302, out.redirectUrl);
+  if (out.redirectUrl) {
+    const r = await fetch(out.redirectUrl);
+    if (!r.ok || !r.body) throw new HttpError(502, 'No se pudo obtener el archivo.');
+    out.stream = Readable.fromWeb(r.body);
+  }
   res.set('Content-Type', row.mime_type);
   res.set('X-Content-Type-Options', 'nosniff');
   // Images can be previewed inline; documents are always downloaded
@@ -219,9 +248,12 @@ async function download(id, res, inline) {
   out.stream.on('error', () => res.destroy()).pipe(res);
 }
 
-async function categories() {
-  const rows = await db.query("SELECT category, COUNT(*) AS n FROM repo_files WHERE category IS NOT NULL AND category <> '' GROUP BY category ORDER BY category");
-  return rows;
+async function categories(user) {
+  const scope = ownScope(user, 'repo_files');
+  return db.query(
+    `SELECT category, COUNT(*) AS n FROM repo_files WHERE category IS NOT NULL AND category <> ''${andScope(scope)} GROUP BY category ORDER BY category`,
+    scope.params
+  );
 }
 
 /** Imports files added directly in OneDrive and flags files deleted there */
@@ -253,10 +285,18 @@ async function sync() {
   return { added, updated, missing: missingIds.length };
 }
 
-async function status() {
+async function status(user) {
   const s = await storage.active().status();
-  const [{ n, bytes }] = await db.query('SELECT COUNT(*) AS n, COALESCE(SUM(size_bytes), 0) AS bytes FROM repo_files');
-  return { ...s, files: n, bytes: Number(bytes), maxMb: env.repository.maxMb, extensions: EXTENSIONS };
+  const scope = ownScope(user, 'repo_files');
+  const [{ n, bytes }] = await db.query(`SELECT COUNT(*) AS n, COALESCE(SUM(size_bytes), 0) AS bytes FROM repo_files${scope.sql ? ' WHERE ' + scope.sql : ''}`, scope.params);
+  const limits = { files: n, bytes: Number(bytes), maxMb: env.repository.maxMb, extensions: EXTENSIONS };
+  if (seesAll(user)) return { ...s, ...limits };
+  // Uploader: only whether uploads work, never which account / drive / folder is behind it
+  return {
+    driver: 'repository', configured: s.configured, connected: s.connected, ownFilesOnly: true,
+    message: s.connected ? 'Listo para subir archivos.' : 'El repositorio no está disponible por ahora. Avise a un administrador.',
+    ...limits,
+  };
 }
 
 module.exports = { receive, create, list, getOne, update, remove, download, categories, sync, status };
