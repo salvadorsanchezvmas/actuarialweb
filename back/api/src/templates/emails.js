@@ -64,7 +64,7 @@ function layout({ preheader = '', title, body, lang = 'en' }) {
 <tr><td align="center">
   <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:#fff;border-radius:12px;overflow:hidden">
     <tr><td style="background:${NAVY};padding:24px 32px">
-      <img src="${env.siteUrl}/assets/logos/logo-10th-white-crop.png" alt="Actuarial Factor" width="120" style="display:block;border:0">
+      <img src="${env.siteUrl}/assets/logos/logo-white-crop.png" alt="Actuarial Factor" width="120" style="display:block;border:0">
     </td></tr>
     <tr><td style="padding:32px">
       <h1 style="margin:0 0 16px;font-size:22px;color:${NAVY}">${e(title)}</h1>

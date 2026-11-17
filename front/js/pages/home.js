@@ -27,11 +27,14 @@
       var list = res && res.data;
       var track = AF.$('#testimonials');
       if (!track || !Array.isArray(list) || !list.length) return;
+      if (track.hasAttribute('data-static-reviews')) return; // backup page keeps the reviews in its HTML
       track.innerHTML = list.map(function (t) {
-        return '<article class="review" aria-roledescription="slide">' +
-          '<span class="review__rating">' + STAR + AF.escape(Number(t.rating).toFixed(1)) + '/5</span>' +
-          '<h4 class="review__role">' + AF.escape(t.author_role) + '</h4>' +
-          '<blockquote>' + AF.escape(t.quote) + '</blockquote></article>';
+        var rated = t.rating !== null && t.rating !== undefined && t.rating !== '';
+        return '<article class="review' + (rated ? '' : ' review--plain') + '" aria-roledescription="slide">' +
+          (rated ? '<span class="review__rating">' + STAR + AF.escape(Number(t.rating).toFixed(1)) + '/5</span>' : '') +
+          '<blockquote>' + AF.escape(t.quote) + '</blockquote>' +
+          // Who said it, as a signature under the quote
+          '<p class="review__cite">— <cite>' + AF.escape(t.author_role) + '</cite></p></article>';
       }).join('');
       var carousel = track.closest('[data-carousel]');
       if (carousel) AF.initCarousel(carousel);

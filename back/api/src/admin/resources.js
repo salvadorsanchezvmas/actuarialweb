@@ -89,7 +89,7 @@ module.exports = {
       { name: 'author_role', label: 'Autor / puesto (EN)', type: 'text', required: true, max: 120, list: true, half: true },
       { name: 'author_role_es', label: 'Autor / puesto (ES)', type: 'text', max: 120, half: true },
       { name: 'company_type', label: 'Tipo de empresa', type: 'text', max: 120, half: true },
-      { name: 'rating', label: 'Calificación (0–5)', type: 'decimal', min: 0, max: 5, required: true, list: true, half: true },
+      { name: 'rating', label: 'Calificación (0–5, opcional)', type: 'decimal', min: 0, max: 5, required: false, list: true, half: true },
       { name: 'quote', label: 'Reseña (EN)', type: 'textarea', required: true, max: 2000, list: true },
       { name: 'quote_es', label: 'Reseña (ES)', type: 'textarea', max: 2000 },
       sort, active,

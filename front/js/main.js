@@ -211,11 +211,23 @@
       if (target) track.scrollTo({ left: target.offsetLeft - track.offsetLeft, behavior: reduceMotion ? 'auto' : 'smooth' });
       setActive(i);
     }
+    // Time on screen grows with the text: 6 s minimum, about 4 words per second, 30 s at most
+    function readingTime() {
+      var per = perView();
+      var words = slides().slice(page * per, page * per + per).reduce(function (n, s) {
+        return n + (s.textContent.trim().split(/\s+/).length || 0);
+      }, 0);
+      return Math.min(Math.max(6000, words * 250), 30000);
+    }
     function play() {
       stop();
-      if (!reduceMotion && pages() > 1) timer = setInterval(function () { if (!paused) goTo(page + 1); }, 6000);
+      if (reduceMotion || pages() < 2) return;
+      timer = setTimeout(function tick() {
+        if (!paused) goTo(page + 1);
+        timer = setTimeout(tick, paused ? 1000 : readingTime());
+      }, readingTime());
     }
-    function stop() { if (timer) clearInterval(timer); timer = null; }
+    function stop() { if (timer) clearTimeout(timer); timer = null; }
 
     var scrollT;
     function onScroll() {
@@ -242,6 +254,36 @@
     }
     var onResize = function () { renderDots(); setActive(Math.min(page, pages() - 1)); };
 
+    // Mouse drag (desktop), like swiping on touch screens: past 60px moves one page
+    var drag = null;
+    var snapT;
+    function onDragStart(e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      clearTimeout(snapT);
+      drag = { x: e.clientX, left: track.scrollLeft, moved: false };
+      track.classList.add('is-dragging');
+      e.preventDefault();
+    }
+    function onDragMove(e) {
+      if (!drag) return;
+      var dx = e.clientX - drag.x;
+      if (Math.abs(dx) > 3) drag.moved = true;
+      track.scrollLeft = drag.left - dx;
+    }
+    function onDragEnd(e) {
+      if (!drag) return;
+      var dx = e.clientX - drag.x;
+      drag = null;
+      var target = Math.abs(dx) > 60 ? page + (dx < 0 ? 1 : -1) : page;
+      goTo(Math.min(Math.max(target, 0), pages() - 1));
+      // Snap points come back once the smooth scroll has landed
+      snapT = setTimeout(function () { track.classList.remove('is-dragging'); }, 500);
+      play();
+    }
+
+    track.addEventListener('pointerdown', onDragStart);
+    window.addEventListener('pointermove', onDragMove);
+    window.addEventListener('pointerup', onDragEnd);
     track.addEventListener('scroll', onScroll, { passive: true });
     track.addEventListener('keydown', onKey);
     dotsWrap && dotsWrap.addEventListener('click', onDot);
@@ -260,6 +302,10 @@
     root._afCarousel = {
       destroy: function () {
         stop();
+        clearTimeout(snapT);
+        track.removeEventListener('pointerdown', onDragStart);
+        window.removeEventListener('pointermove', onDragMove);
+        window.removeEventListener('pointerup', onDragEnd);
         track.removeEventListener('scroll', onScroll);
         track.removeEventListener('keydown', onKey);
         dotsWrap && dotsWrap.removeEventListener('click', onDot);

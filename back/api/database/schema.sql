@@ -69,7 +69,7 @@ CREATE TABLE IF NOT EXISTS testimonials (
   author_role   VARCHAR(120) NOT NULL,
   author_role_es VARCHAR(120) NULL,
   company_type  VARCHAR(120) NULL,
-  rating        DECIMAL(2,1) NOT NULL DEFAULT 5.0,
+  rating        DECIMAL(2,1) NULL DEFAULT NULL,   -- optional: no badge when empty
   quote         TEXT NOT NULL,
   quote_es      TEXT NULL,
   sort_order    SMALLINT NOT NULL DEFAULT 0,
