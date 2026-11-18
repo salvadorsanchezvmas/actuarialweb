@@ -34,7 +34,7 @@
           (rated ? '<span class="review__rating">' + STAR + AF.escape(Number(t.rating).toFixed(1)) + '/5</span>' : '') +
           '<blockquote>' + AF.escape(t.quote) + '</blockquote>' +
           // Who said it, as a signature under the quote
-          '<p class="review__cite">— <cite>' + AF.escape(t.author_role) + '</cite></p></article>';
+          '<p class="review__cite"><cite>' + AF.escape(t.author_role) + '</cite></p></article>';
       }).join('');
       var carousel = track.closest('[data-carousel]');
       if (carousel) AF.initCarousel(carousel);
