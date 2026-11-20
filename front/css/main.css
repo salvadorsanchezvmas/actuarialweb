@@ -1053,8 +1053,8 @@ body[data-page="insights"] .page-hero .hero__media img { object-position: 70% 35
   .hero { min-height: 0; height: clamp(520px, 143vw, 700px); align-items: flex-end; padding-block: var(--header-h) clamp(80px, 26.5vw, 130px); }
 }
 body[data-page="practice-areas"] .page-hero .hero__media picture img { object-position: 50% 54%; } /* client review: shows the charts */
-body[data-page="our-firm"] .page-hero .hero__media picture img { object-position: 50% 40%; }
-body[data-page="contact"] .page-hero .hero__media img { object-position: 50% 30%; }
+body[data-page="our-firm"] .page-hero .hero__media img { object-position: 50% 30%; }
+body[data-page="contact"] .page-hero .hero__media img { object-position: 50% 50%; }
 /* Small original post images (logo, poster, photo): shown whole and centered, never stretched past ~1.5x */
 .post-card__img--contain { display: grid; place-items: center; background: #f4f5f8; padding: 14px; }
 .post-card__img--contain img { width: auto; height: 100%; max-width: 100%; object-fit: contain; }
@@ -1063,3 +1063,31 @@ body[data-page="contact"] .page-hero .hero__media img { object-position: 50% 30%
 .post-static__cover img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
 .post-static__cover--contain { display: grid; place-items: center; background: #f4f5f8; padding: clamp(20px, 3vw, 36px); }
 .post-static__cover--contain img { width: auto; aspect-ratio: auto; max-width: 100%; height: clamp(180px, 22vw, 300px); object-fit: contain; border-radius: 6px; }
+
+/* Article pages (static posts and post.html) start with the white header: use the compact sticky size
+   from the top, so there's no tall empty band above the content */
+@media (min-width: 1100px) {
+  body:has(.header--solid) { --header-h: var(--header-h-compact); }
+  .header--solid .header__logo { height: 34px; transform: none; }
+  .header--solid .header__nav, .header--solid .header__actions { transform: none; }
+  .header--solid .header__nav ul { gap: clamp(18px, 2vw, 32px); }
+  .header--solid .header__nav { margin-right: 24px; }
+  .header--solid .header__nav a { font-size: .95rem; }
+  .header--solid .header__login { width: 44px; height: 44px; }
+  .header--solid .header__login .login-icon { width: 26px; height: auto; }
+  .header--solid [data-sidenav-open] { display: inline-grid; }
+}
+.media-frame picture { display: block; width: 100%; height: 100%; }
+
+/* iOS Safari fix: the city label (absolute, z-index) gets its own layer and ignores the face's
+   backface-visibility, so it showed mirrored on the back of the flipped card. Hide the back side
+   of every layer inside both faces and give the front face its own 3D position. */
+.flip__front { -webkit-transform: rotateY(0deg); transform: rotateY(0deg); }
+.flip__face *, .flip__face::before, .flip__face::after { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.flip__inner { -webkit-transform-style: preserve-3d; }
+/* Safari sizes "height: 100%" of an absolute child of a grid against the content box (minus padding),
+   which left a bare strip under the back photo. Paint the photo as the face background instead. */
+.flip__back--photo { background-color: var(--navy-900); background-size: cover; background-repeat: no-repeat; }
+.flip__back--photo:has(.flip__back-bg--coral) { background-image: url("../img/office-coral-back.jpg"); background-position: center 30%; }
+.flip__back--photo:has(.flip__back-bg--cdmx) { background-image: url("../img/office-cdmx-back.jpg"); background-position: center top; }
+.flip__back-bg { display: none; }
