@@ -1,0 +1,3 @@
+-- Team members before 2026-11-19 (Our Firm texts update). Restore: run this file.
+UPDATE team_members SET name = 'Espy Mead', role = 'Founder and CEO', role_es = 'Fundadora y CEO', bio = 'More than 30 years of actuarial experience in all lines of business (P&C, Health and Life). Former Chief Actuary at Chubb Latin America. FCAS, FSA, MAAA.', bio_es = 'Más de 30 años de experiencia actuarial en todas las líneas de negocio (Daños, Salud y Vida). Ex Actuaria en Jefe de Chubb Latinoamérica. FCAS, FSA, MAAA.', photo_url = 'img/team-espy-mead.jpg', linkedin_url = NULL, sort_order = 1, is_active = 1 WHERE id = 1;
+DELETE FROM team_members WHERE name IN ('Karla Sosa', 'Barbara Di Vico', 'Perla Galindo', 'Diego Cortés');

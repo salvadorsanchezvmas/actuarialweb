@@ -79,6 +79,7 @@ RedirectMatch 404 ^/Nueva\ carpeta/.*$
   ExpiresByType text/css "access plus 1 month"
   ExpiresByType application/javascript "access plus 1 month"
   ExpiresByType image/jpeg "access plus 6 months"
+  ExpiresByType image/webp "access plus 6 months"
   ExpiresByType image/png "access plus 6 months"
   ExpiresByType image/svg+xml "access plus 6 months"
   ExpiresByType font/ttf "access plus 1 year"
@@ -86,4 +87,5 @@ RedirectMatch 404 ^/Nueva\ carpeta/.*$
 </IfModule>
 
 AddType font/ttf .ttf
+AddType image/webp .webp
 AddType application/manifest+json .webmanifest

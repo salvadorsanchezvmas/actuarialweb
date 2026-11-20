@@ -167,6 +167,12 @@
     <!-- About Actuarial Factor (text only) -->
     <section class="section about" id="about" aria-labelledby="about-title">
       <div class="container about__inner">
+        <!-- 10th anniversary heading (ribbon graphics from the client) -->
+        <div class="anniversary reveal">
+          <img class="anniversary__ribbon" src="img/ribbon-navy.png" alt="" width="900" height="285" aria-hidden="true">
+          <p class="anniversary__text" data-i18n-html="celebrating_the_10th_year_anniversary">Celebrating the <strong><span class="anniversary__gold">10th year</span> anniversary</strong></p>
+          <img class="anniversary__ribbon anniversary__ribbon--right" src="img/ribbon-gold.png" alt="" width="900" height="285" aria-hidden="true">
+        </div>
         <div class="about__text reveal">
           <h2 class="title-lg" id="about-title" data-i18n-html="about_actuarial_factor">About <span>Actuarial Factor</span></h2>
           <p data-i18n="actuarial_factor_llc_is_an_international">Actuarial Factor, LLC is an international and independent actuarial consulting firm, founded in 2014, with the purpose of providing tailored actuarial services with the highest quality standards and expertise in every line of business across all jurisdictions in the United States, Latin America, and the Caribbean. Our clients include property and casualty (re)insurance companies, life and health (re)insurance companies, managing general agents (MGAs), insurtechs, self-insured entities, and captive insurance companies.</p>
@@ -179,7 +185,7 @@
     <section class="consulting" aria-labelledby="consulting-title">
       <div class="consulting__wrap">
         <div class="consulting__card reveal">
-          <div class="consulting__media" data-parallax="0.25"><img src="img/hero-buildings.jpg" alt="" loading="lazy" width="1600" height="1002"></div>
+          <div class="consulting__media" data-parallax="0.25"><picture><source type="image/webp" srcset="img/consulting-dashboard-1200.webp 1200w, img/consulting-dashboard-1672.webp 1672w" sizes="(min-width: 900px) 95vw, 100vw"><img src="img/consulting-dashboard-1672.jpg" srcset="img/consulting-dashboard-1200.jpg 1200w, img/consulting-dashboard-1672.jpg 1672w" sizes="(min-width: 900px) 95vw, 100vw" alt="" loading="lazy" decoding="async" width="1672" height="941"></picture></div>
           <div class="consulting__content">
             <h2 class="title-lg" id="consulting-title" data-i18n-html="independent_actuarial_consulting">Independent <span>Actuarial Consulting</span></h2>
             <p class="consulting__subtitle" data-i18n="actuarial_expertise_that_understands_your_business">Actuarial expertise that understands your business.</p>
@@ -200,29 +206,29 @@
           <article class="card reveal" data-delay="0">
             <div class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 3v18h18"></path><path d="M7 15l4-4 3 3 6-6"></path></svg></div>
             <span class="card__tag" data-i18n="re_insurance_companies">(Re)insurance companies</span>
-            <h3 data-i18n="pricing_services">Pricing services</h3>
-            <p data-i18n="premiums_estimation_product_development_and_determination">Premiums estimation, product development and determination of rates, including catastrophe modeling.</p>
+            <h3 data-i18n="pricing_services_2">Pricing Services</h3>
+            <p data-i18n="comprehensive_pricing_support_new_product_development">Comprehensive pricing support: new product development, rate-making, rate filings and pricing peer reviews.</p>
             <a class="link-arrow" href="pricing-services.html" data-i18n="learn_more">Learn more</a>
           </article>
           <article class="card reveal" data-delay="1">
             <div class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"></ellipse><path d="M4 5v6c0 1.7 3.6 3 8 3s8-1.3 8-3V5M4 11v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></svg></div>
             <span class="card__tag" data-i18n="re_insurance_companies">(Re)insurance companies</span>
-            <h3 data-i18n="reserving_services">Reserving services</h3>
-            <p data-i18n="loss_reserve_analysis_actuarial_opinions_regulatory">Loss reserve analysis, actuarial opinions, regulatory reports and Appointed Actuary services.</p>
+            <h3 data-i18n="reserving_services_2">Reserving Services</h3>
+            <p data-i18n="loss_reserve_analyses_actuarial_reports_schedule">Loss reserve analyses, Actuarial Reports, Schedule P reviews, reserving peer reviews and Appointed Actuary services.</p>
             <a class="link-arrow" href="reserving-services.html" data-i18n="learn_more">Learn more</a>
           </article>
           <article class="card reveal" data-delay="2">
             <div class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path><path d="M9 12l2 2 4-4"></path></svg></div>
             <span class="card__tag" data-i18n="captives_self_insured">Captives &amp; self-insured</span>
-            <h3 data-i18n="captive_insurance_services">Captive insurance services</h3>
-            <p data-i18n="feasibility_studies_pricing_and_reserving_for">Feasibility studies, pricing and reserving for captive insurance companies and self-insured entities.</p>
+            <h3 data-i18n="captive_insurance_and_self_insurance">Captive Insurance and Self-Insurance</h3>
+            <p data-i18n="includes_pricing_i_e_actuarial_feasibility">Includes pricing (i.e., actuarial feasibility studies), reserving, litigation, and mergers and acquisitions.</p>
             <a class="link-arrow" href="captive-insurance.html" data-i18n="learn_more">Learn more</a>
           </article>
           <article class="card reveal" data-delay="3">
             <div class="card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="6" cy="6" r="3"></circle><circle cx="6" cy="18" r="3"></circle><circle cx="18" cy="12" r="3"></circle><path d="M6 9v6M8.5 7.5l7 3M8.5 16.5l7-3"></path></svg></div>
             <span class="card__tag" data-i18n="strategy">Strategy</span>
-            <h3 data-i18n="mergers_and_acquisitions">Mergers and acquisitions</h3>
-            <p data-i18n="actuarial_due_diligence_plus_definition_and">Actuarial due diligence plus definition and refinement of growth strategies.</p>
+            <h3 data-i18n="mergers_and_acquisitions_services">Mergers and Acquisitions Services</h3>
+            <p data-i18n="independent_actuarial_support_for_transactions_reserves">Independent actuarial support for transactions: reserves, reinsurance impact and pricing models.</p>
             <a class="link-arrow" href="mergers-acquisitions.html" data-i18n="learn_more">Learn more</a>
           </article>
         </div>
@@ -239,10 +245,8 @@
         </div>
 
         <div class="clients__stats" id="stats">
-          <div class="cstat reveal" data-delay="0"><div class="cstat__value"><span data-count="55">55</span><sup>+</sup></div><div class="cstat__label" data-i18n="years_of_combined_experience">Years of combined experience</div></div>
-          <div class="cstat reveal" data-delay="1"><div class="cstat__value"><span data-count="60">60</span><sup>+</sup></div><div class="cstat__label" data-i18n="organizations_advised">Organizations advised</div></div>
-          <div class="cstat reveal" data-delay="2"><div class="cstat__value"><span data-count="180">180</span><sup>+</sup></div><div class="cstat__label" data-i18n="projects_completed">Projects completed</div></div>
-          <div class="cstat reveal" data-delay="3"><div class="cstat__value"><span data-count="98">98</span><sup>%</sup></div><div class="cstat__label" data-i18n="client_satisfaction">Client satisfaction</div></div>
+          <div class="cstat reveal" data-delay="0"><div class="cstat__value"><span data-count="75">75</span><sup>+</sup></div><div class="cstat__label" data-i18n="years_of_combined_experience">Years of combined experience</div></div>
+          <div class="cstat reveal" data-delay="1"><div class="cstat__value"><span data-count="180">180</span><sup>+</sup></div><div class="cstat__label" data-i18n="invoices_completed">Invoices completed</div></div>
         </div>
 
         <h3 class="clients__say reveal" data-i18n="what_they_say">What they say?</h3>

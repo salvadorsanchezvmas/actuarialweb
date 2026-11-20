@@ -260,7 +260,7 @@ ul { margin: 0; padding: 0; list-style: none; }
   .header__nav ul { gap: clamp(22px, 2.2vw, 44px); }
   .header__login { width: auto; height: auto; padding: 0; border-radius: 0; }
   .header__login:hover { background: none; opacity: .85; }
-  .header__login .login-icon { width: clamp(46px, 4vw, 72px); height: 46px; } /* client review: 46px tall icon */
+  .header__login .login-icon { width: clamp(46px, 4vw, 72px); height: 40px; } /* client review: 40px tall icon */
   .header:not(.is-scrolled):not(.header--solid) [data-sidenav-open] { display: none; }
   .header.is-scrolled .header__logo, .header.is-scrolled .header__nav, .header.is-scrolled .header__actions { transform: none; }
   .header.is-scrolled .header__nav ul { gap: clamp(18px, 2vw, 32px); }
@@ -900,3 +900,166 @@ main .section .card p, main .section .card li, main .section .consent-placeholde
 main .section .breadcrumb li { font-size: .85rem; }
 /* Section subheadings without a style of their own (Privacy, Terms, Sitemap) */
 main .section h2:not([class]) { font-size: clamp(1.25rem, 1.7vw, 2.6rem); }
+
+/* ==========================================================================
+   Our Firm (client texts, Nov 2026): story, 3 uniques, core values, team bios
+   ========================================================================== */
+.story__inner { max-width: 1100px; }
+.story .title-lg { color: var(--white); margin-bottom: clamp(24px, 2.6vw, 44px); }
+.story .title-lg span { color: var(--gold-400); }
+.story__quote { position: relative; margin: 0; padding-left: clamp(20px, 2.4vw, 40px); border-left: 3px solid var(--gold-500); }
+.story__quote p { color: rgba(255, 255, 255, .9); font-size: clamp(1rem, 1.2vw, 1.35rem); line-height: 1.6; font-style: italic; }
+.story__quote p:first-child::before { content: "“"; }
+.story__quote p:last-child { margin-bottom: 0; }
+.story__quote p:last-child::after { content: "”"; }
+.story__author { display: flex; align-items: center; gap: 16px; margin-top: clamp(24px, 2.6vw, 40px); padding-left: clamp(20px, 2.4vw, 40px); }
+.story__author img { width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 3px solid var(--gold-500); }
+.story__author strong { display: block; color: var(--white); font-size: clamp(1.05rem, 1.2vw, 1.3rem); }
+.story__author span { color: var(--gold-400); font-size: .95rem; }
+
+.uniques { margin-top: clamp(24px, 2.6vw, 40px); }
+.unique { display: flex; align-items: center; gap: 18px; }
+.unique .card__icon { margin: 0; flex: none; }
+.unique h3 { margin: 0; font-size: clamp(1.1rem, 1.3vw, 1.5rem); }
+.core-values__title { margin-top: clamp(48px, 5vw, 88px); }
+.values--core { margin-top: clamp(24px, 2.6vw, 40px); color: var(--navy-700); }
+.values--core li { display: grid; place-items: center; background: var(--white); border-color: var(--gray-100); font-size: clamp(1rem, 1.1vw, 1.25rem); }
+@media (min-width: 900px) { .values--core { grid-template-columns: repeat(5, 1fr); } }
+
+/* Team cards: photo, role, name, first paragraph; the full bio opens in a pop-up */
+.team-grid { margin-top: clamp(24px, 2.6vw, 40px); align-items: stretch; }
+.team-card { display: flex; flex-direction: column; align-items: center; }
+.team-card h3 { font-size: clamp(1.2rem, 1.4vw, 1.6rem); margin: 6px 0 12px; }
+main .section .team-card .team-card__summary { font-size: 1rem; color: var(--gray-600); line-height: 1.55; margin-bottom: 20px;
+  display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+.team-card__open { margin-top: auto; }
+
+.bio-modal { width: min(760px, calc(100vw - 32px)); max-height: min(86vh, 900px); padding: 0; border: 0; border-radius: var(--radius-lg); box-shadow: 0 30px 80px rgba(22, 30, 52, .35); color: var(--navy-700); overflow: hidden; }
+.bio-modal[open] { display: flex; flex-direction: column; animation: bio-in .25s var(--ease); }
+.bio-modal::backdrop { background: rgba(22, 30, 52, .6); backdrop-filter: blur(3px); }
+@keyframes bio-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.bio-modal__close { position: absolute; top: 14px; right: 14px; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--gray-100); color: var(--navy-700); z-index: 1; }
+.bio-modal__close:hover { background: var(--navy-700); color: var(--white); }
+.bio-modal__close svg { width: 20px; height: 20px; }
+.bio-modal__head { display: flex; align-items: center; gap: 20px; padding: clamp(24px, 3vw, 36px) clamp(24px, 3vw, 40px) 20px; border-bottom: 1px solid var(--gray-100); padding-right: 64px; }
+.bio-modal__photo { width: clamp(80px, 9vw, 112px); height: clamp(80px, 9vw, 112px); border-radius: 50%; object-fit: cover; border: 4px solid var(--gold-100); flex: none; }
+.bio-modal__head h3 { margin: 4px 0 0; font-size: clamp(1.4rem, 1.9vw, 2rem); }
+.bio-modal__body { padding: 20px clamp(24px, 3vw, 40px) clamp(24px, 3vw, 36px); overflow-y: auto; -webkit-user-select: text; user-select: text; }
+.bio-modal__body p { color: var(--gray-600); line-height: 1.65; font-size: clamp(1rem, 1.05vw, 1.1rem); }
+.bio-modal__body p:last-child { margin-bottom: 0; }
+html.bio-open { overflow: hidden; }
+@media (max-width: 560px) { .bio-modal__head { flex-direction: column; text-align: center; padding-right: clamp(24px, 3vw, 40px); } }
+/* 5 team cards: the last row (2 cards) is centered */
+@media (min-width: 900px) {
+  .team-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 28px; }
+  .team-grid > .team-card { flex: 0 1 calc((100% - 56px) / 3); }
+}
+
+/* ==========================================================================
+   Practice Areas (client texts, Nov 2026)
+   ========================================================================== */
+.practice-areas, .consulting-services { margin-top: clamp(24px, 2.6vw, 40px); }
+.practice-area, .consulting-service { display: flex; flex-direction: column; }
+.practice-area h3 { font-size: clamp(1.15rem, 1.35vw, 1.5rem); }
+main .section .practice-area p { font-size: clamp(1rem, 1.05vw, 1.2rem); color: var(--gray-600); }
+.practice-area .link-arrow, .consulting-service .link-arrow { margin-top: auto; padding-top: 8px; }
+.consulting-service__head { display: flex; align-items: center; gap: 16px; margin-bottom: 18px; }
+.consulting-service__head .card__icon { margin: 0; flex: none; }
+.consulting-service__head h3 { margin: 0; font-size: clamp(1.2rem, 1.45vw, 1.6rem); }
+.check-list { display: grid; gap: 12px; margin: 0 0 20px; padding: 0; list-style: none; }
+main .section .check-list li { position: relative; padding-left: 28px; font-size: clamp(.98rem, 1.05vw, 1.15rem); line-height: 1.55; color: var(--gray-600); }
+.check-list li::before { content: ""; position: absolute; left: 0; top: .55em; width: 14px; height: 8px; border-left: 2px solid var(--gold-500); border-bottom: 2px solid var(--gold-500); transform: rotate(-45deg); }
+.practice-cta { margin-top: clamp(28px, 3vw, 48px); text-align: center; }
+.detail-list .check-list { margin: 0; }
+
+/* ==========================================================================
+   Insights: static posts (no API, works on GitHub Pages)
+   ========================================================================== */
+.posts-static { margin-top: clamp(24px, 2.6vw, 40px); }
+a.post-card__img { display: block; }
+.post-card__img img { transition: transform .5s var(--ease); }
+.post-card:hover .post-card__img img { transform: scale(1.04); }
+.post-card__body h3 a { color: inherit; }
+.post-card__body h3 a:hover { color: var(--gold-500); }
+main .section .post-card__excerpt { font-size: 1rem; color: var(--gray-600); display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+.post-static .title-lg { margin-bottom: 12px; font-weight: 700; }
+.post-static .post-card__meta { margin-bottom: 24px; }
+.post-static__cover { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: var(--radius-lg); margin: 0 0 28px; }
+.post-static p a:not(.link-arrow) { color: var(--navy-700); text-decoration: underline; text-underline-offset: 3px; }
+.post-static__back { margin-top: 32px; }
+
+/* 10th anniversary heading over About (home): ribbons on both sides of the text */
+.anniversary { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: clamp(8px, 1.5vw, 28px); margin: 0 auto clamp(32px, 3.6vw, 64px); max-width: 1200px; }
+.anniversary__ribbon { width: 100%; max-width: 360px; height: auto; justify-self: end; }
+.anniversary__ribbon--right { justify-self: start; transform: scaleX(-1); }
+.anniversary__text { margin: 0; text-align: center; color: var(--navy-700); font-size: clamp(1.3rem, 2.2vw, 2.6rem); font-weight: 300; line-height: 1.1; white-space: nowrap; }
+.anniversary__text strong { display: block; font-weight: 700; }
+.anniversary__gold { color: var(--gold-500); }
+main .section .anniversary__text { font-size: clamp(1.3rem, 2.2vw, 2.6rem); }
+@media (max-width: 640px) {
+  .anniversary { gap: 6px; }
+  .anniversary__text { font-size: 1.15rem; }
+  main .section .anniversary__text { font-size: 1.15rem; }
+}
+
+/* Offices cards (client reference): inset from the title, wider gap, panoramic ratio */
+#offices .offices { padding-inline: clamp(8px, 1vw, 24px); gap: clamp(48px, 4.4vw, 96px); }
+#offices .flip { aspect-ratio: 826 / 372; }
+@media (max-width: 899px) {
+  #offices .offices { padding-inline: 8px; gap: clamp(40px, 10vw, 72px); }
+  #offices .flip { aspect-ratio: 372 / 244; }
+}
+/* Two stats (client review): centered pair, as in the reference capture */
+@media (min-width: 900px) { .clients__stats { justify-content: center; gap: clamp(48px, 6vw, 140px); padding-inline: 0; } }
+.clients__stats .cstat { text-align: center; }
+.clients__stats .cstat__label { margin-inline: auto; }
+/* Ribbons fill the whole width, from the content edges to the text (client proposal) */
+.anniversary { max-width: none; gap: clamp(6px, 1vw, 20px); }
+.anniversary__ribbon { max-width: none; width: 100%; justify-self: stretch; }
+/* Consulting background (dashboard photo, Nov 2026): original parallax (inset -18%, speed .25);
+   the photo is already dark, so a moderate tint on the text side is enough */
+.consulting__media img { object-position: 50% 45%; }
+.consulting__card::before { background: linear-gradient(90deg, rgba(22, 30, 52, .85), rgba(22, 30, 52, .78) 55%, rgba(22, 30, 52, .76)); } /* client review */
+.consulting__media picture { display: block; width: 100%; height: 100%; }
+/* Anniversary heading at the same size as the About title (client review) */
+.anniversary__text, main .section .anniversary__text { font-size: clamp(2.2rem, 2.7vw, 3.8rem); line-height: 1.04; }
+@media (max-width: 640px) { .anniversary__text, main .section .anniversary__text { font-size: 1.15rem; } }
+/* About spacing (client capture at 1536px): 82px from the banner to the ribbons, ~106px from the ribbons to "About" */
+@media (min-width: 1100px) { body[data-page="home"] .about { margin-top: clamp(0px, .65vw, 14px); } }
+.anniversary { margin-bottom: clamp(48px, 6.9vw, 130px); }
+/* Banner pictures (responsive WebP): fill like the plain image; keep the face (right side) in view */
+.hero__media picture { display: block; width: 100%; height: 100%; }
+body[data-page="insights"] .page-hero .hero__media img { object-position: 70% 35%; }
+
+/* ==========================================================================
+   Mobile type scale (client capture at 425px wide): titles ~32.5px, subtitles ~20.5px, body text 12.5px.
+   Scales with the screen width between small and large phones.
+   ========================================================================== */
+@media (max-width: 640px) {
+  .title-xl, .title-lg, .page-hero h1,
+  .hero .title-xl, .about__text .title-lg, .consulting .title-lg, .clients .title-lg, #offices .title-lg,
+  .anniversary__text, main .section .anniversary__text { font-size: clamp(1.6rem, 7.65vw, 2.1rem); }
+  .anniversary__text, main .section .anniversary__text { font-size: clamp(1rem, 4.4vw, 1.25rem); } /* must fit between the ribbons */
+  .subtitle, .consulting__subtitle, .clients__subtitle, #offices .subtitle, .clients__say { font-size: clamp(1.1rem, 4.8vw, 1.35rem); }
+  .hero p, .page-hero p, .lead, .about__text p, .consulting__content p:not(.consulting__subtitle), .clients__text,
+  main .section p:not([class]), main .section li:not([class]), .article p:not([class]), .article li:not([class]),
+  .review blockquote, main .section .check-list li, main .section .practice-area p, .team-member__body p,
+  main .section .team-card .team-card__summary, main .section .post-card__excerpt, .story__quote p {
+    font-size: clamp(12px, 2.94vw, 14px);
+  }
+  .hero p { line-height: 1.3; margin-bottom: 28px; }
+
+  /* Main banner: fixed height like the capture (608px at 425px wide), content near the bottom */
+  .hero { min-height: 0; height: clamp(520px, 143vw, 700px); align-items: flex-end; padding-block: var(--header-h) clamp(80px, 26.5vw, 130px); }
+}
+body[data-page="practice-areas"] .page-hero .hero__media picture img { object-position: 50% 54%; } /* client review: shows the charts */
+body[data-page="our-firm"] .page-hero .hero__media picture img { object-position: 50% 40%; }
+body[data-page="contact"] .page-hero .hero__media img { object-position: 50% 30%; }
+/* Small original post images (logo, poster, photo): shown whole and centered, never stretched past ~1.5x */
+.post-card__img--contain { display: grid; place-items: center; background: #f4f5f8; padding: 14px; }
+.post-card__img--contain img { width: auto; height: 100%; max-width: 100%; object-fit: contain; }
+.post-card:hover .post-card__img--contain img { transform: scale(1.03); }
+.post-static__cover { margin: 0 0 28px; border-radius: var(--radius-lg); overflow: hidden; }
+.post-static__cover img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+.post-static__cover--contain { display: grid; place-items: center; background: #f4f5f8; padding: clamp(20px, 3vw, 36px); }
+.post-static__cover--contain img { width: auto; aspect-ratio: auto; max-width: 100%; height: clamp(180px, 22vw, 300px); object-fit: contain; border-radius: 6px; }

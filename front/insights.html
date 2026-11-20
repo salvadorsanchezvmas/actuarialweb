@@ -2,7 +2,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title data-i18n="meta.insights_actuarial_factor">Insights | Actuarial Factor</title>
-  <meta name="description" content="News, regulatory updates and actuarial insights from the Actuarial Factor team." data-i18n-attr="content:meta.news_regulatory_updates_and_actuarial_insights">
+  <meta name="description" content="News from Actuarial Factor: events, awards and milestones of our firm and team." data-i18n-attr="content:meta.news_from_actuarial_factor_events_awards">
   <link rel="canonical" href="https://www.actuarialfactor.com/insights">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#232d46">
@@ -14,7 +14,7 @@
   <meta property="og:locale:alternate" content="es_MX">
   <meta property="og:url" content="https://www.actuarialfactor.com/insights">
   <meta property="og:title" content="Insights | Actuarial Factor" data-i18n-attr="content:meta.insights_actuarial_factor">
-  <meta property="og:description" content="News, regulatory updates and actuarial insights from the Actuarial Factor team." data-i18n-attr="content:meta.news_regulatory_updates_and_actuarial_insights">
+  <meta property="og:description" content="News from Actuarial Factor: events, awards and milestones of our firm and team." data-i18n-attr="content:meta.news_from_actuarial_factor_events_awards">
   <meta property="og:image" content="https://www.actuarialfactor.com/img/og/og-insights.jpg?v=3">
   <meta property="og:image:secure_url" content="https://www.actuarialfactor.com/img/og/og-insights.jpg?v=3">
   <meta property="og:image:type" content="image/jpeg">
@@ -34,7 +34,7 @@
   <!-- Twitter / X -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Insights | Actuarial Factor" data-i18n-attr="content:meta.insights_actuarial_factor">
-  <meta name="twitter:description" content="News, regulatory updates and actuarial insights from the Actuarial Factor team." data-i18n-attr="content:meta.news_regulatory_updates_and_actuarial_insights">
+  <meta name="twitter:description" content="News from Actuarial Factor: events, awards and milestones of our firm and team." data-i18n-attr="content:meta.news_from_actuarial_factor_events_awards">
   <meta name="twitter:image" content="https://www.actuarialfactor.com/img/og/og-insights.jpg?v=3">
 
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32.png">
@@ -147,7 +147,7 @@
   <main id="main">
 
     <section class="page-hero">
-      <div class="hero__media"><img src="img/hero-buildings.jpg" alt="" width="1600" height="1002" fetchpriority="high"></div>
+      <div class="hero__media"><picture><source type="image/webp" srcset="img/insights-hero-1200.webp 1200w, img/insights-hero-1920.webp 1920w" sizes="100vw"><img src="img/insights-hero-1920.jpg" srcset="img/insights-hero-1200.jpg 1200w, img/insights-hero-1920.jpg 1920w" sizes="100vw" alt="" width="1920" height="1162" fetchpriority="high"></picture></div>
       <div class="container">
         <ol class="breadcrumb" aria-label="Breadcrumb" data-i18n-attr="aria-label:breadcrumb">
           <li><a href="index.html" data-i18n="home">Home</a></li>
@@ -158,14 +158,39 @@
       </div>
     </section>
 
+    <!-- Static posts (client texts, Nov 2026): no API needed, so they also show on GitHub Pages -->
     <section class="section" aria-labelledby="posts-title">
       <div class="container">
-        <h2 class="sr-only" id="posts-title" data-i18n="all_posts">All posts</h2>
-        <div class="filters" id="post-filters" role="toolbar" aria-label="Filter by category" data-i18n-attr="aria-label:filter_by_category">
-          <button type="button" class="chip is-active" data-category="" data-i18n="all_posts">All posts</button>
+        <h2 class="title-lg reveal" id="posts-title" data-i18n-html="latest_news">Latest <span>news</span></h2>
+        <div class="grid grid-3 posts-static" id="posts">
+          <article class="card post-card reveal">
+            <a class="post-card__img post-card__img--contain" href="news-espy-mead-toastmasters-presidency.html" tabindex="-1" aria-hidden="true"><img src="img/news-espy-toastmasters.jpg" alt="" loading="lazy" width="640" height="360"></a>
+            <div class="post-card__body">
+              <div class="post-card__meta"><span data-i18n="news">News</span><time datetime="2018">2018</time></div>
+              <h3><a href="news-espy-mead-toastmasters-presidency.html" data-i18n="espy_mead_completes_her_presidency_at">Espy Mead Completes her Presidency at Miami Advanced Toastmasters</a></h3>
+              <p class="post-card__excerpt" data-i18n="congratulations_to_espy_mead_principal_of">Congratulations to Espy Mead, principal of Actuarial Factor, who has just completed her presidency term at Miami Advanced Toastmasters. Espy was president from July 2017 to June 2018. She is a Distinguished Toastmaster (DTM), which represents the highest level of educational achievement in Toastmasters.</p>
+              <a class="link-arrow" href="news-espy-mead-toastmasters-presidency.html" data-i18n="read_more">Read more</a>
+            </div>
+          </article>
+          <article class="card post-card reveal" data-delay="1">
+            <a class="post-card__img post-card__img--contain" href="news-vcia-annual-conference-2018.html" tabindex="-1" aria-hidden="true"><img src="img/news-vcia-2018.jpg" alt="" loading="lazy" width="640" height="360"></a>
+            <div class="post-card__body">
+              <div class="post-card__meta"><span data-i18n="news">News</span><time datetime="2018">2018</time></div>
+              <h3><a href="news-vcia-annual-conference-2018.html" data-i18n="please_join_actuarial_factor_llc_at">Please Join Actuarial Factor LLC at the 2018 VCIA Annual Conference</a></h3>
+              <p class="post-card__excerpt" data-i18n="the_2018_vcia_annual_conference_will">The 2018 VCIA Annual Conference will be held in Burlington, Vermont from August 7, 2018 – August 9, 2018. Over 1000 people in the captive community will gather to attend the educational sessions and network with colleagues from all over the world about the latest trends and ideas in the industry.</p>
+              <a class="link-arrow" href="news-vcia-annual-conference-2018.html" data-i18n="read_more">Read more</a>
+            </div>
+          </article>
+          <article class="card post-card reveal" data-delay="2">
+            <a class="post-card__img post-card__img--contain" href="news-actuarial-firm-of-the-year-nomination.html" tabindex="-1" aria-hidden="true"><img src="img/news-us-captive-awards-2018.png" alt="" loading="lazy" width="640" height="360"></a>
+            <div class="post-card__body">
+              <div class="post-card__meta"><span data-i18n="news">News</span><time datetime="2018">2018</time></div>
+              <h3><a href="news-actuarial-firm-of-the-year-nomination.html" data-i18n="actuarial_factor_llc_nominated_for_actuarial">Actuarial Factor LLC Nominated for Actuarial Firm of the Year</a></h3>
+              <p class="post-card__excerpt" data-i18n="we_are_proud_to_announce_that">We are proud to announce that Actuarial Factor has made the shortlist for the 2018 US Captive Review’s Actuarial Firm of the Year. This award looks to recognize firms who have outperformed their competitors and demonstrated the highest level of excellence over the past 12 months.</p>
+              <a class="link-arrow" href="news-actuarial-firm-of-the-year-nomination.html" data-i18n="read_more">Read more</a>
+            </div>
+          </article>
         </div>
-        <div class="grid grid-3" id="posts" aria-live="polite"></div>
-        <nav class="pagination" id="posts-pagination" aria-label="Pagination" data-i18n-attr="aria-label:pagination"></nav>
       </div>
     </section>
 
@@ -259,7 +284,7 @@
   <script src="js/api.js"></script>
   <script src="js/main.js"></script>
   <script src="js/consent.js"></script>
-  <script src="js/pages/insights.js"></script>
+
 
 
 </body></html>
